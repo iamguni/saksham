@@ -1,0 +1,28 @@
+{
+  "pillars": [
+    {
+      "title": "Livelihood & Women Employability",
+      "desc": "Skills development and self-reliance programs.",
+      "color": "primary",
+      "featured_homepage": true
+    },
+    {
+      "title": "Relief & Community Care",
+      "desc": "Immediate disaster relief and sustained community management infrastructure.",
+      "color": "secondary",
+      "featured_homepage": true
+    },
+    {
+      "title": "Health & Dignity for All",
+      "desc": "Ensuring modern health support services and awareness campaigns.",
+      "color": "accent",
+      "featured_homepage": true
+    },
+    {
+      "title": "Empowering Through Education",
+      "desc": "Delivering structural learning facilities to children.",
+      "color": "slate",
+      "featured_homepage": true
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+// Fetch all individual activity JSON files from the folder
+const activityFiles = await Astro.glob('../../content/activities/*.json');
+const activities = activityFiles.map(file => file.default);
+
+// Sort activities by date descending
+const sortedActivities = activities.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+// Dynamically index all available images inside the activities asset folder eagerly
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/activities/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+// ⚡ Extract unique Years and Months for the filter dropdowns
+const uniqueYears = [...new Set(sortedActivities.map(a => new Date(a.date).getFullYear()))].sort((a, b) => b - a);
+
+// Fixed month index mapping array for display names
+const monthNames = [
+  "January", "February", "March", "April", "May", "June", 
+  "July", "August", "September", "October", "November", "December"
+];
+---
+<MainLayout title="Our Activities" description="Discover recent volunteer campaigns, CSR initiatives, and donation drives organized by Saksham Change Maker Trust.">
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h1 class="text-4xl font-black text-slate-900 tracking-tight mb-4">NGO Activities & Drives</h1>
+      <p class="text-slate-600">Collective action and employee volunteering building immediate grassroots value across regions.</p>
+    </div>
+
+    <!-- ⚡ Dynamic Dropdown Date Filter Panel Container -->
+    <div class="bg-slate-50 border border-slate-200/60 rounded-2xl p-6 max-w-3xl mx-auto mb-16 flex flex-col sm:flex-row items-center justify-center gap-4 shadow-inner">
+      <div class="flex items-center space-x-3 w-full sm:w-auto">
+        <label for="year-select" class="text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Filter Year:</label>
+        <select 
+          id="year-select" 
+          class="w-full sm:w-40 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm focus:border-[rgb(var(--color-primary))] focus:ring-1 focus:ring-[rgb(var(--color-primary))] focus:outline-none transition-all cursor-pointer"
+        >
+          <option value="all">All Years</option>
+          {uniqueYears.map(year => (
+            <option value={year}>{year}</option>
+          ))}
+        </select>
+      </div>
+
+      <div class="flex items-center space-x-3 w-full sm:w-auto">
+        <label for="month-select" class="text-xs font-bold uppercase tracking-wider text-slate-500 whitespace-nowrap">Filter Month:</label>
+        <select 
+          id="month-select" 
+          class="w-full sm:w-44 bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm focus:border-[rgb(var(--color-primary))] focus:ring-1 focus:ring-[rgb(var(--color-primary))] focus:outline-none transition-all cursor-pointer"
+        >
+          <option value="all">All Months</option>
+          {monthNames.map((name, index) => (
+            <option value={index}>{name}</option>
+          ))}
+        </select>
+      </div>
+
+      <button 
+        id="reset-date-filters" 
+        class="w-full sm:w-auto px-5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold uppercase tracking-wider text-slate-500 hover:bg-slate-100 transition-all focus:outline-none shadow-sm"
+      >
+        Clear Filters
+      </button>
+    </div>
+
+    <!-- Empty State Informational Banner Component Layout -->
+    <div id="empty-state" class="text-center py-20 bg-slate-50 rounded-2xl border border-dashed border-slate-200 hidden">
+      <p class="text-slate-500 text-base font-medium">No drives or volunteer activities recorded matching the selected year and month combo.</p>
+    </div>
+
+    <!-- 📸 Unified Interactive Grid Matrix Platform -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="activities-grid">
+      {sortedActivities.map(activity => {
+        const targetImagePath = activity.image || '';
+        const isAssetDiscovered = targetImagePath in images;
+        
+        // Parse raw timestamps into standard lookup attributes for the DOM engine
+        const dateObj = new Date(activity.date);
+        const cardYear = dateObj.getFullYear();
+        const cardMonth = dateObj.getMonth(); // Zero-indexed (0 = Jan)
+
+        return (
+          <div 
+            class="activity-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-all duration-300"
+            data-year={cardYear}
+            data-month={cardMonth}
+          >
+            <div class="h-48 overflow-hidden bg-slate-100">
+              {isAssetDiscovered ? (
+                <img 
+                  src={images[targetImagePath].default.src} 
+                  alt={activity.title} 
+                  class="w-full h-full object-cover" 
+                  loading="lazy" 
+                />
+              ) : (
+                <img 
+                  src={targetImagePath} 
+                  alt={activity.title} 
+                  class="w-full h-full object-cover" 
+                  loading="lazy" 
+                />
+              )}
+            </div>
+            <div class="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="text-xs text-slate-400 font-medium block mb-2">
+                  {dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+                <h3 class="text-xl font-bold text-slate-900 mb-2 line-clamp-2">{activity.title}</h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">{activity.summary}</p>
+              </div>
+              <a href={`/activities/${activity.slug}`} class="text-[rgb(var(--color-primary))] font-bold text-sm hover:underline inline-flex items-center">
+                View Drive Details &rarr;
+              </a>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</MainLayout>
+
+<!-- Client-Side Runtime JavaScript Matrix managing Date Filtration states -->
+<script>
+  const yearSelect = document.getElementById('year-select') as HTMLSelectElement;
+  const monthSelect = document.getElementById('month-select') as HTMLSelectElement;
+  const resetBtn = document.getElementById('reset-date-filters') as HTMLButtonElement;
+  const activityCards = document.querySelectorAll('.activity-card');
+  const emptyState = document.getElementById('empty-state') as HTMLDivElement;
+
+  function filterActivitiesByDate() {
+    const selectedYear = yearSelect.value;
+    const selectedMonth = monthSelect.value;
+    let visibleCount = 0;
+
+    activityCards.forEach(card => {
+      const cardHtml = card as HTMLElement;
+      const cardYear = cardHtml.getAttribute('data-year') || '';
+      const cardMonth = cardHtml.getAttribute('data-month') || '';
+
+      // Match evaluation matrix rules flags
+      const yearMatches = selectedYear === 'all' || cardYear === selectedYear;
+      const monthMatches = selectedMonth === 'all' || cardMonth === selectedMonth;
+
+      if (yearMatches && monthMatches) {
+        cardHtml.classList.remove('hidden-activity');
+        visibleCount++;
+      } else {
+        cardHtml.classList.add('hidden-activity');
+      }
+    });
+
+    // ⚡ Empty state dynamic layout toggle handler logic loops
+    if (visibleCount === 0) {
+      emptyState.classList.remove('hidden');
+    } else {
+      emptyState.classList.add('hidden');
+    }
+  }
+
+  // Bind change action listeners to selectors
+  yearSelect.addEventListener('change', filterActivitiesByDate);
+  monthSelect.addEventListener('change', filterActivitiesByDate);
+
+  // Clear tracking values matrix row values on user request resets
+  resetBtn.addEventListener('click', () => {
+    yearSelect.value = 'all';
+    monthSelect.value = 'all';
+    filterActivitiesByDate();
+  });
+</script>
+
+<style>
+  /* Gracefully hides elements out of chronological window without altering columns styling */
+  .hidden-activity {
+    display: none !important;
+  }
+</style>

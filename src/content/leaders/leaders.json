@@ -1,0 +1,60 @@
+{
+  "leaders": [
+    {
+      "name": "Rishi Pratap Singh",
+      "role": "Founder & Managing Trustee",
+      "message": "True change is never accidental; it is the result of systematic grassroots execution, dedicated collaboration, and an unwavering commitment to human dignity.",
+      "photo": "/src/assets/images/leaders/01-Rishi-Pratap-Singh-e1782287158359-2.webp",
+      "featured_about": true
+    },
+    {
+      "name": "Prabhat Kumar",
+      "role": "Founder & Managing Trustee",
+      "message": "Our goal is to transition communities from relying on temporary relief to establishing permanent self-reliance, ensuring sustainable growth for generations to come.",
+      "photo": "/src/assets/images/leaders/02-Prabhat-sir-e1782287298216.webp",
+      "featured_about": true
+    },
+    {
+      "name": "Gurmeet Singh",
+      "role": "Managing Member",
+      "message": "True structural transformation begins when we empower individuals with sustainable economic tools and community care infrastructure.",
+      "photo": "/src/assets/images/leaders/05-Gurmeet-Singh-e1782287355543.webp",
+      "featured_about": false
+    },
+    {
+      "name": "Md. Parvej",
+      "role": "Managing Member",
+      "message": "By bridging the gap between resource networks and grassroots realities, we can channel collective social responsibility into measurable life outcomes.",
+      "photo": "/src/assets/images/leaders/Parvej_Pics-1-e1782287399426.webp",
+      "featured_about": false
+    },
+    {
+      "name": "Pankaj Kumar",
+      "role": "Managing Trustee",
+      "message": "Transparency, operational efficiency, and community-centric governance are the key pillars that convert institutional vision into actual social impact.",
+      "photo": "/src/assets/images/leaders/PankajPic-e1782289207977-768x768.webp",
+      "featured_about": false
+    },
+    {
+      "name": "Savita Kumari",
+      "role": "Managing Member",
+      "message": "When you empower a woman with sustainable skills, you uplift an entire household and build the framework for an equitable economic collective.",
+      "photo": "/src/assets/images/leaders/image-22-e1782287575482.webp",
+      "featured_about": false
+    },
+    {
+      "name": "Manya Mittr",
+      "role": "Managing Member",
+      "message": "Education is the foundational equalizer. Giving children structural learning platforms breaks systemic cycles and unlocks boundless human potential.",
+      "photo": "/src/assets/images/leaders/ManyaMittar-e1783322526812.webp",
+      "featured_about": false
+    },
+    {
+      "name": "Reetika Nigam",
+      "role": "Managing Member",
+      "message": "Advancing public health care accessibility and dignity ensures that underserved families have the structural safety net required to dream of a better future.",
+      "photo": "/src/assets/images/leaders/D9F3395C-EF39-484F-9BF2-F24D448ACB53-2-e1782288956857.webp",
+      "featured_about": false
+    }
+  ]
+}

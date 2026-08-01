@@ -1,0 +1,30 @@
+{
+  "title": "How You Can Help",
+  "subtitle": "Your Contribution can change someone's future",
+    "pillars": [
+      {
+        "color": "var(--color-primary)",
+        "icon": "Users",
+        "actionText": "Join As Volunteer",
+        "link": "/join",
+        "description": "Join hands with us to mentor, teach, and support communities. Every hour you contribute strengthens education, health, and crisis response efforts.",
+        "title": "Volunteers"
+      },
+      {
+        "color": "var(--color-secondary)",
+        "icon": "Heart",
+        "actionText": "Support Our Work",
+        "link": "/donate",
+        "description": "Your contributions directly fund education programs, healthcare support, and emergency relief. Every rupee goes towards building a stronger and more inclusive society.",
+        "title": "Donation"
+      },
+      {
+        "color": "var(--color-accent)",
+        "icon": "CalendarDays",
+        "actionText": "View Live Events",
+        "link": "/events",
+        "description": "Participate in awareness drives, community campaigns, and fundraising events that amplify Saksham’s mission and bring sustainable change.",
+        "title": "Events & Fundraising"
+      }
+    ]
+}

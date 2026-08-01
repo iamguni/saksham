@@ -1,0 +1,24 @@
+{
+    "nav_links": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "About Us",
+      "url": "/about"
+    },
+    {
+      "label": "Projects",
+      "url": "/projects"
+    },
+    {
+      "label": "Activities",
+      "url": "/activities"
+    },
+    {
+      "label": "Gallery",
+      "url": "/gallery"
+    }
+  ]
+}

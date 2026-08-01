@@ -1,0 +1,224 @@
+---
+import siteData from '../content/settings/site.json';
+import navLinksData from '../content/nav_links/nav_links.json';
+import { Search, Menu, X } from 'lucide-astro';
+
+const { logo_url, ngo_name } = siteData;
+const navLinks = navLinksData.nav_links || [];
+---
+<header class="sticky top-0 z-50 bg-white shadow-md border-b border-slate-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+    <a href="/" class="flex items-center space-x-2 relative z-50">
+      {logo_url ? (
+        <img src={logo_url} alt={ngo_name} class="h-12 w-auto object-contain" />
+      ) : (
+        <span class="text-2xl font-black tracking-tight text-[rgb(var(--color-primary))] flex items-center">
+          <span class="text-[rgb(var(--color-secondary))] mr-1">✦</span> {ngo_name}
+        </span>
+      )}
+    </a>
+
+    <!-- DESKTOP NAVIGATION LINKS -->
+    <nav class="hidden md:flex space-x-8 font-medium">
+      {navLinks.map((nav: { url: string; label: string }) => (
+        <a href={nav.url} class="text-slate-700 hover:text-[rgb(var(--color-primary))] transition-colors">{nav.label}</a>
+      ))}
+    </nav>
+
+    <!-- RIGHT ACTION BAR MATRIX -->
+    <div class="flex items-center space-x-3 sm:space-x-4 relative z-50">
+      <!-- 🔍 Desktop Search Box Layout (Hidden on Mobile) -->
+      <div class="relative hidden sm:block w-48 lg:w-64">
+        <input 
+          type="text" 
+          id="desktop-search-input" 
+          placeholder="Search..." 
+          class="site-search-trigger w-full pl-8 pr-3 py-1.5 text-sm bg-slate-100 rounded-full border border-transparent focus:outline-none focus:border-[rgb(var(--color-primary))] transition-all" 
+          autocomplete="off"
+        />
+        <Search class="absolute left-2.5 top-2.5 w-4 h-4 text-slate-400" />
+        
+        <!-- Desktop Floating Dropdown Results Tray -->
+        <div 
+          id="desktop-search-results" 
+          class="search-results-tray absolute right-0 left-0 sm:left-auto sm:w-80 mt-2 bg-white border border-slate-200 shadow-xl rounded-2xl max-h-80 overflow-y-auto hidden divide-y divide-slate-100"
+        >
+        </div>
+      </div>
+      
+      <!-- 🎯 Join Us Button -->
+      <a href="/join-us" class="bg-[rgb(var(--color-primary))] text-white px-4 sm:px-5 py-2 rounded-full font-semibold hover:bg-[rgb(var(--color-accent))] transition-colors shadow-sm text-xs sm:text-sm inline-block whitespace-nowrap">
+        Join Us
+      </a>
+      
+      <!-- MOBILE MENU HAMBURGER CONTROLLER -->
+      <button 
+        id="mobile-menu-toggle-btn"
+        class="flex md:hidden items-center justify-center p-2 rounded-xl bg-slate-50 hover:bg-slate-100 border border-slate-200/60 text-slate-900 focus:outline-none transition-colors"
+        aria-label="Toggle Navigation Menu"
+      >
+        <Menu id="burger-icon-view" class="w-6 h-6 block" />
+        <X id="close-icon-view" class="w-6 h-6 hidden" />
+      </button>
+    </div>
+  </div>
+
+  <!-- MOBILE LINKS DROPDOWN DRAWER -->
+  <div 
+    id="mobile-menu-dropdown-drawer"
+    class="hidden absolute top-20 left-0 w-full bg-white border-b border-slate-200/60 shadow-xl z-40 px-6 py-6 flex-col space-y-3 md:hidden"
+  >
+    {navLinks.map((nav: { url: string; label: string }) => (
+      <a 
+        href={nav.url} 
+        class="text-base font-bold text-slate-800 hover:text-[rgb(var(--color-primary))] py-2.5 border-b border-slate-50 last:border-0"
+      >
+        {nav.label}
+      </a>
+    ))}
+    
+    <!-- 🔍 Mobile Search bar layout block configuration inside dropdown context -->
+    <div class="pt-4 flex flex-col sm:hidden relative">
+      <div class="relative w-full">
+        <input 
+          type="text" 
+          id="mobile-search-input" 
+          placeholder="Search..." 
+          class="site-search-trigger w-full pl-9 pr-3 py-2 text-sm bg-slate-100 rounded-full border border-transparent focus:outline-none focus:border-[rgb(var(--color-primary))]" 
+          autocomplete="off"
+        />
+        <Search class="absolute left-3 top-3 w-4 h-4 text-slate-400" />
+      </div>
+
+      <!-- Mobile Floating Dropdown Results Tray -->
+      <div 
+        id="mobile-search-results" 
+        class="search-results-tray absolute left-0 right-0 mt-2 bg-white border border-slate-200 shadow-xl rounded-2xl max-h-64 overflow-y-auto hidden divide-y divide-slate-100 z-50"
+      >
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Toggle Behavior & Global Search Engine Scripts -->
+<script>
+  // --- MOBILE DRAWER LAYOUT INTERACTION CONTROLS ---
+  const toggleBtn = document.getElementById('mobile-menu-toggle-btn') as HTMLButtonElement;
+  const dropdownDrawer = document.getElementById('mobile-menu-dropdown-drawer') as HTMLDivElement;
+  const burgerIcon = document.getElementById('burger-icon-view') as HTMLElement;
+  const closeIcon = document.getElementById('close-icon-view') as HTMLElement;
+
+  if (toggleBtn && dropdownDrawer && burgerIcon && closeIcon) {
+    toggleBtn.addEventListener('click', () => {
+      const isDrawerHidden = dropdownDrawer.classList.contains('hidden');
+
+      if (isDrawerHidden) {
+        dropdownDrawer.classList.remove('hidden');
+        dropdownDrawer.classList.add('flex');
+        burgerIcon.classList.replace('block', 'hidden');
+        closeIcon.classList.replace('hidden', 'block');
+      } else {
+        dropdownDrawer.classList.remove('flex');
+        dropdownDrawer.classList.add('hidden');
+        burgerIcon.classList.replace('hidden', 'block');
+        closeIcon.classList.replace('block', 'hidden');
+      }
+    });
+  }
+
+  // --- ⚡ UNIFIED SITE CLIENT-SIDE SEARCH INDACTION SYSTEM ---
+  interface SearchItem {
+    title: string;
+    summary: string;
+    description: string;
+    url: string;
+    type: string;
+  }
+
+  let searchIndex: SearchItem[] = [];
+  let isIndexFetched = false;
+
+  // Lazy-fetch search-index endpoint schema once input is focused
+  async function ensureSearchIndexReady() {
+    if (isIndexFetched) return;
+    try {
+      const response = await fetch('/api/search-index.json');
+      searchIndex = await response.json();
+      isIndexFetched = true;
+    } catch (error) {
+      console.error('Failed to resolve database application search metrics compilation matrix:', error);
+    }
+  }
+
+  function handleSearchEvent(inputEl: HTMLInputElement, displayContainerEl: HTMLDivElement) {
+    const query = inputEl.value.toLowerCase().trim();
+
+    if (query.length < 2) {
+      displayContainerEl.innerHTML = '';
+      displayContainerEl.classList.add('hidden');
+      return;
+    }
+
+    // Filter across keys matrix
+    const matches = searchIndex.filter(item => 
+      item.title.toLowerCase().includes(query) ||
+      item.summary.toLowerCase().includes(query) ||
+      item.description.toLowerCase().includes(query)
+    );
+
+    displayContainerEl.innerHTML = '';
+
+    if (matches.length === 0) {
+      displayContainerEl.innerHTML = `<div class="p-4 text-xs font-semibold text-slate-400 text-center">No matching records found for "${inputEl.value}"</div>`;
+      displayContainerEl.classList.remove('hidden');
+      return;
+    }
+
+    // Populate drop panel layout nodes strings
+    matches.slice(0, 5).forEach(item => {
+      const linkRow = document.createElement('a');
+      linkRow.href = item.url;
+      linkRow.className = "block p-4 hover:bg-slate-50 transition-colors group text-left";
+      linkRow.innerHTML = `
+        <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 mb-1 group-hover:bg-[rgb(var(--color-primary))]/10 group-hover:text-[rgb(var(--color-primary))] transition-colors">
+          ${item.type}
+        </span>
+        <h4 class="text-xs font-bold text-slate-900 group-hover:text-[rgb(var(--color-primary))] transition-colors line-clamp-1">${item.title}</h4>
+        <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1 leading-relaxed">${item.summary}</p>
+      `;
+      displayContainerEl.appendChild(linkRow);
+    });
+
+    displayContainerEl.classList.remove('hidden');
+  }
+
+  // Setup instances for both viewports concurrently
+  const desktopInput = document.getElementById('desktop-search-input') as HTMLInputElement;
+  const desktopResults = document.getElementById('desktop-search-results') as HTMLDivElement;
+  const mobileInput = document.getElementById('mobile-search-input') as HTMLInputElement;
+  const mobileResults = document.getElementById('mobile-search-results') as HTMLDivElement;
+
+  // Bind desktop listeners
+  if (desktopInput && desktopResults) {
+    desktopInput.addEventListener('focus', ensureSearchIndexReady);
+    desktopInput.addEventListener('input', () => handleSearchEvent(desktopInput, desktopResults));
+  }
+
+  // Bind mobile listeners
+  if (mobileInput && mobileResults) {
+    mobileInput.addEventListener('focus', ensureSearchIndexReady);
+    mobileInput.addEventListener('input', () => handleSearchEvent(mobileInput, mobileResults));
+  }
+
+  // Global overlay safeguard: close drops if clicking outside search boundaries
+  document.addEventListener('click', (e) => {
+    const clickTarget = e.target as HTMLElement;
+    
+    if (desktopInput && desktopResults && !desktopInput.contains(clickTarget) && !desktopResults.contains(clickTarget)) {
+      desktopResults.classList.add('hidden');
+    }
+    if (mobileInput && mobileResults && !mobileInput.contains(clickTarget) && !mobileResults.contains(clickTarget)) {
+      mobileResults.classList.add('hidden');
+    }
+  });
+</script>

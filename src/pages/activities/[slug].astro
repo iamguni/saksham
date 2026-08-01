@@ -1,0 +1,48 @@
+---
+import { getCollection } from 'astro:content';
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export async function getStaticPaths() {
+  const allActivities = await getCollection('activities');
+  return allActivities.map((activity) => ({
+    params: { slug: activity.data.slug },
+    props: { activity: activity.data },
+  }));
+}
+
+const { activity } = Astro.props;
+
+// ⚡ 1. Dynamically index all available images inside the activities asset folder eagerly
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/activities/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+// ⚡ 2. Extract the string path from JSON and check the glob index map
+const targetImagePath = activity.image || '';
+const isAssetDiscovered = targetImagePath in images;
+---
+<MainLayout title={activity.title}>
+  <article class="max-w-3xl mx-auto px-4 py-16">
+    <h1 class="text-3xl md:text-5xl font-black mb-6">{activity.title}</h1>
+    
+    <div class="rounded-2xl w-full overflow-hidden mb-8 max-h-[420px] bg-slate-100">
+      {isAssetDiscovered ? (
+        /* ⚡ 3. Render dynamic optimized source output if matched safely without calling () */
+        <img 
+          src={images[targetImagePath].default.src} 
+          alt={activity.title} 
+          class="w-full h-full object-cover"
+        />
+      ) : (
+        /* Fallback directly to the raw string path value if no match is found */
+        <img 
+          src={targetImagePath} 
+          alt={activity.title} 
+          class="w-full h-full object-cover"
+        />
+      )}
+    </div>
+
+    <div class="max-w-none text-slate-800 text-base space-y-6 whitespace-pre-line">
+      {activity.description}
+    </div>
+  </article>
+</MainLayout>

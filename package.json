@@ -1,0 +1,24 @@
+{
+  "name": "saksham-change-maker",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@astrojs/tailwind": "^5.1.0",
+    "astro": "^4.5.0",
+    "lucide-astro": "^0.368.0",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.9.3"
+  },
+  "allowScripts": {
+    "esbuild@0.21.5": true,
+    "sharp@0.33.5": true
+  }
+}

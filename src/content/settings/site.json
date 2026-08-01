@@ -1,0 +1,20 @@
+{
+  "ngo_name": "Saksham",
+  "tagline": "Saksham Change Maker Trust is an NGO working for the absolute betterment and sustainable restructuring of society.",
+  "logo_url": "/images/Saksham Logo (Digital- RGB)-01 (1).png",
+  "favicon_url": "/images/Saksham Logo (Digital- RGB)-01 (1).png",
+  "stats": {
+    "saplings": 12000,
+    "donations": "2.2M",
+    "lives": 20000,
+    "hours": 5000
+  },
+  "intro": {
+    "heading": "Welcome to Our Trust",
+    "subheading": "Uplifting Communities with Compassion and Commitment",
+    "description": "Saksham Trust has been working silently yet powerfully, nurturing children, restoring dignity, and responding to crisis with humanity. We believe every life deserves opportunity, dignity and care. Our work is rooted in empathy, and our mission is simple, to make every action count.",
+    "image": "/images/Donation-Drive_Sack-Of-Needs-and-Hope-During-Flood-1-1536x1152.webp"
+  },
+  "mission": "To systematically build self-reliance, environmental stability, and healthcare equality through clean grassroots execution.",
+  "vision": "A completely empowered society where every individual possesses the tools, health, and dignity to reach their optimal potential."
+}

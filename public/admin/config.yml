@@ -1,0 +1,212 @@
+backend:
+  name: github
+  repo: iamguni/saksham
+  branch: master
+  base_url: https://sveltia-cms-auth.gurmeetworks.workers.dev
+  site_url: https://saksham.org.in
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "settings"
+    label: "Global Site Settings"
+    icon: "settings"
+    delete: false
+    files:
+      - name: "core_config"
+        label: "Core Info"
+        icon: "info"
+        file: "src/content/settings/site.json"
+        fields:
+          - { label: "NGO Name", name: "ngo_name", widget: "string" }
+          - { label: "Tagline", name: "tagline", widget: "string" }
+          - { label: "Logo Image (Leave blank for fallback Text Icon)", name: "logo_url", widget: "image", required: false }
+          - { label: "Favicon Image (Leave blank for fallback Circle Icon)", name: "favicon_url", widget: "image", required: false }
+          - { label: "Mission Statement", name: "mission", widget: "text" }
+          - { label: "Vision Statement", name: "vision", widget: "text" }
+
+# --- HEADER CONFIGURATION MODULE ---
+      - name: "nav_config"
+        label: "Navigation Config"
+        icon: "menu"
+        file: "src/content/nav_links/nav_links.json"
+        widget: "object"
+        fields:
+          - label: "Navigation Bar Links"
+            name: "nav_links"
+            widget: "list"
+            summary: "{{fields.label}} -> {{fields.url}}"
+            fields:
+              - { label: "Link Display Text", name: "label", widget: "string" }
+              - { label: "Target Route URL", name: "url", widget: "string" }
+
+      - name: "stats_config"
+        label: "Statistics Config"
+        icon: "bar_chart"
+        file: "src/content/settings/site.json"
+        widget: "object"
+        fields:
+          - label: "Statistics Counters"
+            name: "stats"
+            widget: "object"
+            fields:
+              - { label: "Saplings Planted", name: "saplings", widget: "number", default: 12000 }
+              - { label: "Donations Received ($)", name: "donations", widget: "string", default: "2.2M" }
+              - { label: "Lives Impacted", name: "lives", widget: "number", default: 20000 }
+              - { label: "Volunteering Hours", name: "hours", widget: "number", default: 5000 }
+
+      - name: "ngo_info"
+        label: "NGO Information"
+        icon: "page_info"
+        file: "src/content/settings/site.json"
+        widget: "object"
+        fields:
+          # --- WELCOME INTRO SECTION FIELDS ---
+          - label: "Introduction Section Config"
+            name: "intro"
+            widget: "object"
+            fields:
+              - { label: "Intro Section Heading", name: "heading", widget: "string", default: "Welcome to Saksham Change Maker Trust" }
+              - { label: "Intro Section Subheading", name: "subheading", widget: "string", default: "Uplifting Communities with Compassion and Commitment" }
+              - { label: "Main Description Paragraph", name: "description", widget: "text" }
+              - { label: "Featured Side Image URL", name: "image", widget: "image", default: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=600" }
+
+
+# Add this under your site/settings file object fields list
+      - name: "how_you_can_help"
+        label: "How You Can Help Section"
+        icon: "help"
+        file: "src/content/how/howtohelp.json"
+        widget: "object"
+        fields:
+        - { name: "title", label: "Section Title", widget: "string", default: "How You Can Help" }
+        - { name: "subtitle", label: "Section Subtitle", widget: "string", default: "Your Contribution can change someone's future" }
+        - name: "pillars"
+          label: "Call to Action Cards"
+          widget: "list"
+          min: 3
+          max: 3
+          summary: "{{fields.title}}"
+          fields:
+            - { name: "title", label: "Card Title", widget: "string" }
+            - { name: "description", label: "Card Description", widget: "text" }
+            - { name: "link", label: "Redirect Link URL", widget: "string", hint: "e.g., /donate or /join" }
+            - { name: "actionText", label: "Button Label Text", widget: "string" }
+            - { name: "icon", label: "Lucide Icon Name", widget: "string", hint: 'Enter the exact icon name from the library (e.g., BookOpen, HandHeart). <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" style="color: rgb(var(--color-primary)); font-weight: bold; text-decoration: underline;">Open Lucide Icon Reference Library ↗</a>', default: "Users" }
+            - name: "color"
+              label: "Hover Border Accent Theme"
+              widget: "select"
+              options:
+                - { label: "Primary Color Theme", value: "var(--color-primary)" }
+                - { label: "Secondary Color Theme", value: "var(--color-secondary)" }
+                - { label: "Accent Highlight Theme", value: "var(--color-accent)" }
+              default: "var(--color-primary)"
+
+# --- DYNAMIC FOOTER COLUMNS MODULE ---
+      - name: "foot_config"
+        label: "Footer Config"
+        icon: "page_footer"
+        file: "src/content/footer/footer.json"
+        widget: "object"
+        fields:
+          - label: "Footer Columns (Add up to 4 items)"
+            name: "footer"
+            widget: "list"
+            summary: "Column: {{fields.title}}"
+            fields:
+              - { label: "Column Heading", name: "title", widget: "string" }
+              - label: "Column Action Links / Text Blocks"
+                name: "links"
+                widget: "list"
+                summary: "{{fields.label}}"
+                fields:
+                  - { label: "Link Display Label", name: "label", widget: "string" }
+                  - { label: "Target Route URL (Leave blank for raw text display)", name: "url", widget: "string", required: false }
+
+# 2. SEPARATE Dedicated Trustees & Leaders Sidebar Link
+  - name: "trustees_management"
+    label: "Trustees & Leaders Panel"
+    icon: "groups"
+    delete: false
+    files:
+      - name: "leaders_config"
+        label: "Manage Trustees & Leaders"
+        file: "src/content/leaders/leaders.json"
+        description: "Manage, add, update, or reorder NGO trustees and leadership profiles"
+        media_folder: "/src/assets/images/leaders"
+        public_folder: "/src/assets/images/leaders"
+        fields:
+          - label: "Trustees & Leaders List"
+            name: "leaders"
+            widget: "list"
+            summary: "{{fields.name}} - {{fields.role}}"
+            fields:
+              - { label: "Full Name", name: "name", widget: "string" }
+              - { label: "Role / Title", name: "role", widget: "string" }
+              - { label: "Personal Message / Quote", name: "message", widget: "text" }
+              - { label: "Photo", name: "photo", widget: "image"}
+              - { label: "Featured on About Us Page?", name: "featured_about", widget: "boolean", default: false }
+
+# 2. SEPARATE Dedicated Trustees & Leaders Sidebar Link
+  - name: "Strategic_Pillars_Management"
+    label: "Strategic Pillars Panel"
+    icon: "target"
+    delete: false
+    files:
+      - name: "pillars_config"
+        label: "Manage Strategic Pillars"
+        file: "src/content/pillars/pillars.json"
+        description: "Manage, add, update, or reorder strategic pillars"
+        fields:
+# --- STRATEGIC PILLARS MODULE (WORKING AREAS) ---
+          - label: "Strategic Pillars Config"
+            name: "pillars"
+            widget: "list"
+            summary: "{{fields.title}}"
+            fields:
+              - { label: "Pillar Title", name: "title", widget: "string" }
+              - { label: "Pillar Description Text", name: "desc", widget: "text" }
+              - { label: "Accent Color Theme Style", name: "color", widget: "select", options: ["primary", "secondary", "accent", "slate"] }
+              - { label: "Featured on Homepage?", name: "featured_homepage", widget: "boolean", default: false }
+              # - { label: "Target Route URL (Leave blank for raw text display)", name: "url", widget: "string", required: true }
+
+  - name: "projects"
+    label: "NGO Projects"
+    icon: "work"
+    folder: "src/content/projects"
+    media_folder: "/src/assets/images/projects"
+    public_folder: "/src/assets/images/projects"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "title"
+    fields:
+      - { label: "Unique Route URL Slug", name: "slug", widget: "string" }
+      - { label: "Project Title", name: "title", widget: "string" }
+      - { label: "Short Summary", name: "summary", widget: "string" }
+      - { label: "Featured in Slider?", name: "featured_slider", widget: "boolean", default: false }
+      - { label: "Feature Image", name: "image", widget: "image" }
+      - { label: "Working Area Category", name: "category", widget: "select", options: ["Livelihood & Women Employability", "Relief & Community Care", "Health & Dignity for All", "Empowering Through Education"] }
+      - { label: "Execution Date", name: "date", widget: "datetime" }
+      - { label: "Detailed Content Description", name: "description", widget: "text" }
+
+  - name: "activities"
+    label: "NGO Activities"
+    icon: "calendar_clock"
+    folder: "src/content/activities"
+    media_folder: "/src/assets/images/activities"
+    public_folder: "/src/assets/images/activities"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "title"
+    fields:
+      - { label: "Route URL Slug", name: "slug", widget: "string" }
+      - { label: "Activity Title", name: "title", widget: "string" }
+      - { label: "Short Summary", name: "summary", widget: "string" }
+      - { label: "Feature Cover Image", name: "image", widget: "image" }
+      - { label: "Event Execution Date", name: "date", widget: "datetime" }
+      - { label: "Detailed Description", name: "description", widget: "text" }

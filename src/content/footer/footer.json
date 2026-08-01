@@ -1,0 +1,76 @@
+{
+    "footer": [
+    {
+      "links": [
+        {
+          "url": "#",
+          "label": "A completely empowered society where every individual possesses the tools, health, and dignity to reach their optimal potential."
+        }
+      ],
+      "title": "Our Vision"
+    },
+    {
+      "links": [
+        {
+          "url": "/",
+          "label": "Home"
+        },
+        {
+          "url": "/about",
+          "label": "About Us"
+        },
+        {
+          "url": "/projects",
+          "label": "Projects"
+        },
+        {
+          "url": "/activities",
+          "label": "Activities"
+        },
+        {
+          "url": "/contact",
+          "label": "Contact"
+        }
+      ],
+      "title": "Quick Links"
+    },
+    {
+      "links": [
+        {
+          "url": "#",
+          "label": "Livelihood & Women Employability"
+        },
+        {
+          "url": "#",
+          "label": "Relief & Community Care"
+        },
+        {
+          "url": "#",
+          "label": "Health & Dignity for All"
+        },
+        {
+          "url": "#",
+          "label": "Empowering Through Education"
+        }
+      ],
+      "title": "Core Focus"
+    },
+    {
+      "links": [
+        {
+          "label": "Email: director@saksham.org.in",
+          "url": "mailto:director@saksham.org.in"
+        },
+        {
+          "label": "Phone: +91 98765 43210",
+          "url": "tel:+919876543210"
+        },
+        {
+          "label": "Address: Ghaziabad, Uttar Pradesh, India",
+          "url": "#"
+        }
+      ],
+      "title": "Contact Us"
+    }
+  ]
+}

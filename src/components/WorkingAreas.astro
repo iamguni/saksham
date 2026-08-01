@@ -1,0 +1,64 @@
+---
+import pillarData from '../content/pillars/pillars.json';
+
+interface Props {
+  featuredOnly?: boolean;
+}
+
+const { featuredOnly = false } = Astro.props;
+
+// 2. Safely capture the target items
+const allPillars = pillarData.pillars || [];
+
+// 3. Filter using your Sveltia dashboard boolean toggle flag
+const pillars = featuredOnly 
+  ? allPillars.filter(pillar => pillar.featured_homepage === true) 
+  : allPillars;
+
+// Define strict color mappings matching your Tailwind setup
+const colorMap: Record<string, string> = {
+  primary: "border-[rgb(var(--color-primary))]",
+  secondary: "border-[rgb(var(--color-secondary))]",
+  accent: "border-[rgb(var(--color-accent))]",
+  slate: "border-slate-800"
+};
+---
+<section class="bg-slate-100 py-20">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl font-black text-slate-900">Our Strategic Pillars</h2>
+      <div class="w-12 h-1 bg-[rgb(var(--color-primary))] mx-auto mt-3 rounded-full"></div>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {pillars.map((pillar) => {
+        // Correctly look up the matching color style class or fall back onto standard slate
+        const borderColorClass = colorMap[pillar.color] || colorMap.slate;
+        
+        // ⚡ THE FIX: Safe URL encoding protects special characters like ampersands (&) 
+        // by turning them into clean URL parameter tokens (e.g., %26)
+        const targetFilter = pillar.title 
+          ? encodeURIComponent(pillar.title.toLowerCase().trim()) 
+          : 'all';
+
+        return (
+          <a 
+            href={`/projects?filter=${targetFilter}`}
+            class={`block bg-white p-8 rounded-xl shadow-sm border-t-4 ${borderColorClass} transition-all duration-300 hover:-translate-y-1 hover:shadow-md group`}
+          >
+            <h3 class="font-bold text-xl text-slate-900 mb-3 group-hover:text-[rgb(var(--color-primary))] transition-colors duration-200">
+              {pillar.title}
+            </h3>
+            <p class="text-slate-600 text-sm leading-relaxed">
+              {pillar.desc}
+            </p>
+            
+            <div class="mt-6 flex items-center text-xs font-bold uppercase tracking-wider text-slate-400 group-hover:text-[rgb(var(--color-primary))] transition-colors duration-200">
+              View Initiatives &rarr;
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

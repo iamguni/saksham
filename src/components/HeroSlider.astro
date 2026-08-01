@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+
+const featuredProjects = allProjects
+  .filter(project => project.data.featured_slider === true)
+  .map(project => project.data);
+
+const fallbackSlides = [
+  {
+    slug: "nourishment-and-learning-equity",
+    title: "Empowering Communities, Changing Lives",
+    summary: "Join Saksham Change Maker Trust in creating sustainable structural transformation across society.",
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1200"
+  }
+];
+
+const slides = featuredProjects.length > 0 ? featuredProjects : fallbackSlides;
+
+// ⚡ 1. Dynamically index all available images inside the projects asset folder eagerly
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/projects/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+---
+
+<div class="relative w-full h-[75vh] bg-slate-900 overflow-hidden group">
+  <!-- Slides Container Wrapper -->
+  <div id="slider-container" class="w-full h-full relative">
+    {slides.map((slide, index) => {
+      // ⚡ 2. Extract the path string and verify it inside our compiled asset dictionary map
+      const targetImagePath = slide.image || '';
+      const isAssetDiscovered = targetImagePath in images;
+      
+      // Resolve the true background image URL source
+      const resolvedBgImage = isAssetDiscovered 
+        ? images[targetImagePath].default.src 
+        : targetImagePath;
+
+      return (
+        <div 
+          class={`absolute inset-0 w-full h-full transition-all duration-700 ease-in-out visual-slide ${index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`}
+          data-slide-index={index}
+        >
+          <!-- Background Image Overlay Component -->
+          <div 
+            class="absolute inset-0 bg-cover bg-center transition-transform duration-10000 scale-105" 
+            style={`background-image: url('${resolvedBgImage}');`}
+          >
+            <!-- Gradient Tint for Stunning Title Readability -->
+            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-900/50 to-transparent"></div>
+          </div>
+
+          <!-- Hero Content Overlay Layout -->
+          <div class="absolute inset-0 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+            <div class={`max-w-2xl text-white space-y-6 transition-all duration-700 delay-300 slide-content ${index === 0 ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+              <h2 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-tight drop-shadow-sm">
+                {slide.title}
+              </h2>
+              <p class="text-lg md:text-xl text-slate-200 line-clamp-3 leading-relaxed drop-shadow-sm">
+                {slide.summary}
+              </p>
+              <div class="pt-4">
+                <a 
+                  href={`/projects/${slide.slug}`} 
+                  class="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-bold rounded-full text-white bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-accent))] transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 duration-150"
+                >
+                  Learn More About Initiative &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+
+  <!-- Dynamic Dots Indicators -->
+  {slides.length > 1 && (
+    <div class="absolute bottom-6 left-0 right-0 z-20 flex justify-center space-x-3">
+      {slides.map((_, index) => (
+        <button
+          class={`w-3 h-3 rounded-full transition-all duration-300 focus:outline-none slider-dot ${index === 0 ? 'bg-[rgb(var(--color-primary))] scale-125 w-8' : 'bg-white/50 hover:bg-white'}`}
+          data-target-index={index}
+          aria-label={`Go to slide ${index + 1}`}
+        ></button>
+      ))}
+    </div>
+  )}
+</div>
+
+<!-- Clean client-side JavaScript for handling transitions -->
+<script>
+  const slides = document.querySelectorAll('.visual-slide');
+  const dots = document.querySelectorAll('.slider-dot');
+  let currentActive = 0;
+  const slideIntervalTime = 6000; 
+  let autoSlideTimer: number;
+
+  function changeToSlide(targetIndex: number) {
+    if (slides.length <= 1) return;
+
+    // Handle Previous Slide Anim Fades
+    slides[currentActive].classList.remove('opacity-100', 'z-10');
+    slides[currentActive].classList.add('opacity-0', 'z-0');
+    
+    const prevContent = slides[currentActive].querySelector('.slide-content');
+    prevContent?.classList.remove('translate-y-0', 'opacity-100');
+    prevContent?.classList.add('translate-y-4', 'opacity-0');
+
+    if (dots.length) {
+      dots[currentActive].classList.remove('bg-[rgb(var(--color-primary))]', 'scale-125', 'w-8');
+      dots[currentActive].classList.add('bg-white/50');
+    }
+
+    // Handle Target Slide Anim Fades
+    slides[targetIndex].classList.remove('opacity-0', 'z-0');
+    slides[targetIndex].classList.add('opacity-100', 'z-10');
+    
+    const nextContent = slides[targetIndex].querySelector('.slide-content');
+    nextContent?.classList.remove('translate-y-4', 'opacity-0');
+    nextContent?.classList.add('translate-y-0', 'opacity-100');
+
+    if (dots.length) {
+      dots[targetIndex].classList.remove('bg-white/50');
+      dots[targetIndex].classList.add('bg-[rgb(var(--color-primary))]', 'scale-125', 'w-8');
+    }
+
+    currentActive = targetIndex;
+  }
+
+  function nextSlide() {
+    let next = (currentActive + 1) % slides.length;
+    changeToSlide(next);
+  }
+
+  function startTimer() {
+    if (slides.length > 1) {
+      autoSlideTimer = setInterval(nextSlide, slideIntervalTime);
+    }
+  }
+
+  function resetTimer() {
+    clearInterval(autoSlideTimer);
+    startTimer();
+  }
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      const targetElement = e.currentTarget as HTMLButtonElement;
+      const indexAttr = targetElement.getAttribute('data-target-index');
+      if (indexAttr !== null) {
+        const targetIndex = parseInt(indexAttr, 10);
+        changeToSlide(targetIndex);
+        resetTimer();
+      }
+    });
+  });
+
+  startTimer();
+</script>

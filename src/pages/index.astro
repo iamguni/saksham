@@ -1,0 +1,19 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import HeroSlider from '../components/HeroSlider.astro';
+import IntroSection from '../components/IntroSection.astro';
+import WorkingAreas from '../components/WorkingAreas.astro';
+import Statistics from '../components/Statistics.astro';
+import HowToHelp from '../components/HowToHelp.astro';
+import Leaders from '../components/Leaders.astro';
+import MissionVision from '../components/MissionVision.astro';
+---
+<MainLayout title="Home">
+  <HeroSlider />
+  <IntroSection />
+  <WorkingAreas featuredOnly={true}/>
+  <Statistics />
+  <HowToHelp />
+  <Leaders />
+  <MissionVision />
+</MainLayout>

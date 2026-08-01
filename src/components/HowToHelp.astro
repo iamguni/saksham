@@ -1,0 +1,85 @@
+---
+import siteData from '../content/how/howtohelp.json';
+import { Heart, Users, CalendarDays } from 'lucide-astro';
+
+// Capture configure settings from siteData with strict structural fallbacks
+const helpSection = siteData || {};
+const title = helpSection.title || "How You Can Help";
+const subtitle = helpSection.subtitle || "Your Contribution can change someone's future";
+
+// Dynamic map array configuration matching your CMS inputs
+const pillarsData = helpSection.pillars || [];
+
+// Map raw strings coming from JSON inputs back into dynamic Vector Components
+const iconMap = {
+  Users: Users,
+  Heart: Heart,
+  CalendarDays: CalendarDays
+};
+---
+<!-- 🎨 Unified Light Theme Wrapper -->
+<section class="max-w-7xl mx-auto px-4 py-20 bg-slate-50 rounded-3xl my-10 border border-slate-200/60 shadow-sm relative overflow-hidden">
+  
+  <!-- Subtle ambient background brand accent blooms -->
+  <div class="absolute top-0 left-0 w-80 h-80 bg-[rgb(var(--color-primary))]/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 right-0 w-80 h-80 bg-[rgb(var(--color-secondary))]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <!-- 🎯 Centered Content Header -->
+  <div class="text-center max-w-2xl mx-auto mb-16 relative z-10">
+    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">{title}</h2>
+    <div class="w-12 h-1 bg-[rgb(var(--color-primary))] mx-auto mt-4 rounded-full"></div>
+    <p class="text-slate-500 font-bold tracking-wider text-xs uppercase mt-4">
+      {subtitle}
+    </p>
+  </div>
+
+  <!-- Interaction Card Grid Layout Matrix -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10 items-stretch">
+    {pillarsData.map((pillar: any) => {
+      // Safely fall back to Users icon if CMS value mismatches
+      const IconComponent = iconMap[pillar.icon as keyof typeof iconMap] || Users;
+      const themeColor = pillar.color || "var(--color-primary)";
+      
+      return (
+        <div 
+          class="bg-white p-8 rounded-2xl border border-slate-200/60 shadow-sm flex flex-col justify-between h-full hover:shadow-md transition-all duration-300 group"
+          style={`--hover-border: rgb(${themeColor});`}
+        >
+          <div>
+            <!-- ⚡ Massive Icon Badge Display Frame -->
+            <div 
+              class="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6 shadow-sm transition-transform duration-300 group-hover:scale-105"
+              style={`background-color: rgba(${themeColor}, 0.08); color: rgb(${themeColor});`}
+            >
+              <IconComponent class="w-12 h-12 stroke-[1.75]" />
+            </div>
+            
+            <h3 class="font-bold text-2xl text-slate-900 tracking-tight mb-3 transition-colors group-hover:text-[rgb(var(--color-primary))]">
+              {pillar.title}
+            </h3>
+            
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+              {pillar.description}
+            </p>
+          </div>
+
+          <!-- 🎯 Brand Themes Calibration Buttons -->
+          <div class="pt-4 border-t border-slate-100">
+            <a 
+              href={pillar.link}
+              class="inline-flex items-center justify-center w-full px-5 py-3.5 text-sm font-bold rounded-xl text-white bg-[rgb(var(--color-primary))] hover:bg-[rgb(var(--color-primary))]/90 transition-all duration-150 text-center shadow-sm hover:shadow-md hover:-translate-y-0.5 transform focus:outline-none"
+            >
+              {pillar.actionText} &rarr;
+            </a>
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  div[style*="--hover-border"]:hover {
+    border-color: var(--hover-border);
+  }
+</style>

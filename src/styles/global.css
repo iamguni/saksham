@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 229 83 31;    /* #E5531F - Orange */
+    --color-secondary: 0 163 224;  /* #00A3E0 - Sky Blue */
+    --color-accent: 0 104 71;      /* #006847 - Deep Teal */
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased font-sans scroll-smooth;
+  }
+}
+
+.bg-brand-gradient {
+  background: linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-accent)) 100%);
+}

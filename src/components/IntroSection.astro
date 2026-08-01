@@ -1,0 +1,30 @@
+---
+import siteData from '../content/settings/site.json';
+
+const introData = siteData.intro;
+const heading = introData?.heading || "Who We Are";
+const subheading = introData?.subheading || "Uplifting Communities with Compassion and Commitment";
+const description = introData?.description || siteData.tagline;
+const imageUrl = introData?.image || "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800";
+---
+<section class="max-w-7xl mx-auto px-4 py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+  <div>
+    <img 
+      src={imageUrl} 
+      alt={`About ${siteData.ngo_name || 'Saksham'}`} 
+      class="rounded-2xl shadow-xl w-full object-cover h-[350px]" 
+      loading="lazy"
+    />
+  </div>
+  <div>
+    <h2 class="text-3xl font-black mb-4 text-slate-900">{heading}</h2>
+    <!-- Border Left Callout Subheading Style -->
+    <h3 class="text-lg font-medium pl-4 border-l-4 border-[rgb(var(--color-primary))] mb-6 text-slate-700 italic leading-relaxed">
+      {subheading}
+    </h3>
+    <p class="text-slate-600 leading-relaxed mb-6 whitespace-pre-line">{description}</p>
+    <a href="/about" class="text-[rgb(var(--color-primary))] font-bold hover:underline inline-flex items-center">
+      Learn more about our journey &rarr;
+    </a>
+  </div>
+</section>

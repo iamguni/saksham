@@ -1,0 +1,16 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Leaders from '../components/Leaders.astro';
+import MissionVision from '../components/MissionVision.astro';
+import siteData from '../content/settings/site.json'; // Make sure this path points to your new src/data location
+---
+<MainLayout title="About Us">
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    <h1 class="text-4xl font-black mb-6 text-center">About Saksham Change Maker Trust</h1>
+    <p class="text-slate-600 text-lg leading-relaxed text-center mb-12">
+      {siteData.intro?.description || siteData.tagline}
+    </p>
+    <MissionVision />
+    <Leaders featuredOnly={true} />
+  </div>
+</MainLayout>

@@ -1,0 +1,179 @@
+---
+// 1. Direct JSON Import
+import leaderData from '../content/leaders/leaders.json';
+import { ChevronLeft, ChevronRight } from 'lucide-astro';
+
+interface Props {
+  featuredOnly?: boolean;
+}
+
+const { featuredOnly = false } = Astro.props;
+
+// 2. Safely capture the target items
+const allLeaders = leaderData.leaders || [];
+
+// 3. Filter using your Sveltia dashboard boolean toggle flag
+const leaders = featuredOnly 
+  ? allLeaders.filter(leader => leader.featured_about === true) 
+  : allLeaders;
+
+// ⚡ 4. Dynamically map all available images inside the leaders asset directory
+// This indexes files at compilation time so the asset optimizer can map the paths
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/leaders/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+---
+<!-- 🎯 Clean, Outer-Boxless Container Platform -->
+<section class="max-w-7xl mx-auto px-4 py-12 group relative">
+
+  <!-- 🎯 Centered Heading Layout -->
+  <div class="text-center max-w-2xl mx-auto mb-12 relative z-10">
+    <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Our Trustees & Leaders</h2>
+    <div class="w-12 h-1 bg-[rgb(var(--color-primary))] mx-auto mt-4 rounded-full"></div>
+  </div>
+  
+  <!-- Navigation Button Overlays (Recalibrated for the open backdrop layout) -->
+  {leaders.length > 1 && (
+    <>
+      <button 
+        id="prev-leader-btn" 
+        class="absolute left-0 top-[60%] -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-lg border border-slate-200/80 text-slate-700 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0 disabled:cursor-not-allowed focus:outline-none"
+        aria-label="Scroll left"
+      >
+        <ChevronLeft class="w-5 h-5" />
+      </button>
+      <button 
+        id="next-leader-btn" 
+        class="absolute right-0 top-[60%] -translate-y-1/2 z-20 p-3 rounded-full bg-white shadow-lg border border-slate-200/80 text-slate-700 transition-all opacity-0 group-hover:opacity-100 disabled:opacity-0 disabled:cursor-not-allowed focus:outline-none"
+        aria-label="Scroll right"
+      >
+        <ChevronRight class="w-5 h-5" />
+      </button>
+    </>
+  )}
+  
+  <!-- Horizontal Slider Flex Viewport Wrapper -->
+  <div 
+    id="leaders-slider-track"
+    class="flex space-x-6 overflow-x-auto pb-6 scroll-smooth snap-x snap-mandatory scrollbar-none relative z-10"
+    style="scrollbar-width: none; -ms-overflow-style: none;"
+  >
+    {leaders.map(leader => {
+      // ⚡ Extract the string path from JSON and match it against the glob index map
+      const targetImagePath = leader.photo || '';
+      const isAssetDiscovered = targetImagePath in images;
+
+      return (
+        <div class="w-[85vw] sm:w-[45vw] lg:w-[28vw] flex-shrink-0 snap-start snap-always">
+          {/* 💡 Profile Box Element Shell */}
+          <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 text-center flex flex-col justify-between h-full hover:bg-slate-950 transition-all duration-300 shadow-md">
+            <div>
+              {/* Rim-lit avatar configuration */}
+              <div class="w-32 h-32 rounded-full overflow-hidden mx-auto mb-6 border-4 border-slate-800 shadow-inner bg-slate-800">
+                {isAssetDiscovered ? (
+                  /* Render dynamic optimized source output if matched */
+                  <img 
+                    src={images[targetImagePath].default.src}
+                    alt={leader.name} 
+                    class="w-full h-full object-cover" 
+                    loading="lazy"
+                  />
+                ) : (
+                  /* Fallback to direct string path value if no match found */
+                  <img 
+                    src={targetImagePath} 
+                    alt={leader.name} 
+                    class="w-full h-full object-cover" 
+                    loading="lazy"
+                  />
+                )}
+              </div>
+              <h3 class="font-bold text-xl text-white tracking-tight">{leader.name}</h3>
+              <p class="text-sm font-semibold uppercase tracking-wider text-[rgb(var(--color-primary))] mt-1.5">{leader.role}</p>
+            </div>
+            
+            {leader.message && (
+              <p class="text-slate-300 text-sm mt-6 italic leading-relaxed border-t border-slate-800 pt-4 relative">
+                <span class="text-2xl text-[rgb(var(--color-primary))]/20 font-serif absolute -top-1 left-0">“</span>
+                {leader.message}
+              </p>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  #leaders-slider-track::-webkit-scrollbar {
+    display: none;
+  }
+</style>
+
+<!-- Enhanced Auto-Sliding Javascript Client Script -->
+<script>
+  const track = document.getElementById('leaders-slider-track') as HTMLDivElement;
+  const prevBtn = document.getElementById('prev-leader-btn') as HTMLButtonElement;
+  const nextBtn = document.getElementById('next-leader-btn') as HTMLButtonElement;
+
+  if (track) {
+    let autoPlayTimer: number;
+    const scrollInterval = 5000;
+
+    const updateButtonStates = () => {
+      if (!prevBtn || !nextBtn) return;
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 2;
+      nextBtn.disabled = scrollLeft >= maxScroll - 2;
+    };
+
+    const handleScroll = (direction: 'left' | 'right') => {
+      const cardWidth = track.firstElementChild ? (track.firstElementChild as HTMLElement).offsetWidth + 24 : 320;
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+
+      if (direction === 'right' && scrollLeft >= maxScroll - 5) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else if (direction === 'left' && scrollLeft <= 5) {
+        track.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      } else {
+        const scrollOffset = direction === 'left' ? -cardWidth : cardWidth;
+        track.scrollBy({ left: scrollOffset, behavior: 'smooth' });
+      }
+    };
+
+    const startAutoPlay = () => {
+      autoPlayTimer = setInterval(() => {
+        handleScroll('right');
+      }, scrollInterval);
+    };
+
+    const stopAutoPlay = () => {
+      clearInterval(autoPlayTimer);
+    };
+
+    if (prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', () => {
+        handleScroll('left');
+        stopAutoPlay();
+        startAutoPlay();
+      });
+
+      nextBtn.addEventListener('click', () => {
+        handleScroll('right');
+        stopAutoPlay();
+        startAutoPlay();
+      });
+    }
+
+    track.addEventListener('scroll', updateButtonStates, { passive: true });
+    track.addEventListener('mouseenter', stopAutoPlay);
+    track.addEventListener('mouseleave', startAutoPlay);
+    track.addEventListener('touchstart', stopAutoPlay, { passive: true });
+    track.addEventListener('touchend', startAutoPlay, { passive: true });
+    
+    setTimeout(updateButtonStates, 200);
+    startAutoPlay();
+  }
+</script>

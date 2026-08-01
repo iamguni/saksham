@@ -1,0 +1,24 @@
+---
+import siteData from '../content/settings/site.json';
+const { stats } = siteData;
+---
+<section class="bg-brand-gradient py-16 text-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10 text-center">
+    <div class="p-4">
+      <p class="text-4xl md:text-5xl font-black mb-2">{stats.saplings}+</p>
+      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Saplings Sustained</p>
+    </div>
+    <div class="p-4">
+      <p class="text-4xl md:text-5xl font-black mb-2">{stats.donations}</p>
+      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Donations Raised</p>
+    </div>
+    <div class="p-4">
+      <p class="text-4xl md:text-5xl font-black mb-2">{stats.lives}+</p>
+      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Lives Restructured</p>
+    </div>
+    <div class="p-4">
+      <p class="text-4xl md:text-5xl font-black mb-2">{stats.hours}+</p>
+      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Volunteering Hours</p>
+    </div>
+  </div>
+</section>

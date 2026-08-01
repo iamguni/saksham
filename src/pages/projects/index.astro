@@ -1,0 +1,152 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+// Fetch all individual JSON files dynamically
+const projectFiles = await Astro.glob('../../content/projects/*.json');
+const projects = projectFiles.map(file => file.default);
+
+// Dynamically index all available images inside the projects asset folder eagerly
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/projects/*.{jpeg,jpg,png,gif,webp}', { eager: true });
+
+// Extract unique categories for filter button generation row
+const categories = [...new Set(projects.map(p => p.category))].filter(Boolean);
+---
+<MainLayout title="Our Projects">
+  <div class="max-w-7xl mx-auto px-4 py-16">
+    
+    <!-- ⚡ Dynamic Filter Row Matrix Menu -->
+    <div class="flex justify-center items-center space-x-3 mb-12 flex-wrap gap-y-2">
+      <button 
+        class="project-filter-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full bg-[rgb(var(--color-primary))] text-white transition-all shadow-sm focus:outline-none" 
+        data-target="all"
+      >
+        All Projects ({projects.length})
+      </button>
+      
+      {categories.map(category => (
+        <button 
+          class="project-filter-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50 transition-all focus:outline-none" 
+          data-target={category.toLowerCase().trim()}
+        >
+          {category}
+        </button>
+      ))}
+    </div>
+
+    <!-- 📸 Unified Interactive Project Grid Matrix -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+      {projects.map(project => {
+        const targetImagePath = project.image || '';
+        const isAssetDiscovered = targetImagePath in images;
+        const normalizedCategory = project.category ? project.category.toLowerCase().trim() : '';
+
+        return (
+          <div 
+            class="project-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col justify-between hover:shadow-md transition-all duration-300"
+            data-category={normalizedCategory}
+          >
+            <div class="h-48 overflow-hidden bg-slate-100">
+              {isAssetDiscovered ? (
+                <img 
+                  src={images[targetImagePath].default.src} 
+                  alt={project.title} 
+                  class="w-full h-full object-cover" 
+                  loading="lazy" 
+                />
+              ) : (
+                <img 
+                  src={targetImagePath} 
+                  alt={project.title} 
+                  class="w-full h-full object-cover" 
+                  loading="lazy" 
+                />
+              )}
+            </div>
+            
+            <div class="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <span class="inline-block bg-slate-100 text-slate-700 text-xs font-semibold px-2.5 py-1 rounded-full mb-3">
+                  {project.category}
+                </span>
+                <h3 class="text-xl font-bold text-slate-900 mb-2 line-clamp-2">
+                  {project.title}
+                </h3>
+                <p class="text-slate-600 text-sm leading-relaxed mb-6 line-clamp-3">
+                  {project.summary}
+                </p>
+              </div>
+              
+              <a 
+                href={`/projects/${project.slug}`} 
+                class="text-[rgb(var(--color-primary))] font-bold text-sm hover:underline inline-flex items-center"
+              >
+                View Project Details &rarr;
+              </a>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</MainLayout>
+
+<!-- Client-Side Script managing URL parameters and filtering transitions -->
+<script>
+  const filterButtons = document.querySelectorAll('.project-filter-btn');
+  const projectCards = document.querySelectorAll('.project-card');
+
+  function applyFilter(filterValue: string) {
+    const normalizedTarget = filterValue.toLowerCase().trim();
+
+    // 1. Update button selection states highlight rings
+    filterButtons.forEach(btn => {
+      const btnTarget = (btn.getAttribute('data-target') || '').toLowerCase().trim();
+      if (btnTarget === normalizedTarget) {
+        btn.className = "project-filter-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full bg-[rgb(var(--color-primary))] text-white transition-all shadow-sm focus:outline-none";
+      } else {
+        btn.className = "project-filter-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider rounded-full bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50 transition-all focus:outline-none";
+      }
+    });
+
+    // 2. Hide / Show grid project objects matching selection criteria tags
+    projectCards.forEach(card => {
+      const cardHtml = card as HTMLElement;
+      const cardCategory = (cardHtml.getAttribute('data-category') || '').toLowerCase().trim();
+
+      if (normalizedTarget === 'all' || cardCategory === normalizedTarget) {
+        cardHtml.classList.remove('hidden-project');
+      } else {
+        cardHtml.classList.add('hidden-project');
+      }
+    });
+  }
+
+  // Bind standard manual user click interaction mechanics
+  filterButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      const targetBtn = e.currentTarget as HTMLButtonElement;
+      const targetCategory = targetBtn.getAttribute('data-target') || 'all';
+      applyFilter(targetCategory);
+    });
+  });
+
+  // ⚡ THE REDIRECT ROUTER ENGINE: Safely capture and decode parameter criteria strings
+  window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get('filter');
+
+    if (filterParam) {
+      // decodeURIComponent securely parses "%26" strings back into visual "&" configurations
+      applyFilter(decodeURIComponent(filterParam));
+    } else {
+      applyFilter('all');
+    }
+  });
+</script>
+
+<style>
+  /* Prevents grid breaking changes while dropping unselected models cleanly */
+  .hidden-project {
+    display: none !important;
+  }
+</style>

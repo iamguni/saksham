@@ -1,61 +1,62 @@
 {
-    "footer": [
+  "footer": [
     {
+      "title": "Our Vision",
       "links": [
         {
-          "url": "#",
-          "label": "A completely empowered society where every individual possesses the tools, health, and dignity to reach their optimal potential."
+          "label": "A completely empowered society where every individual possesses the tools, health, and dignity to reach their optimal potential.",
+          "url": "#"
         }
-      ],
-      "title": "Our Vision"
+      ]
     },
     {
+      "title": "Quick Links",
       "links": [
         {
-          "url": "/",
-          "label": "Home"
+          "label": "Home",
+          "url": "/"
         },
         {
-          "url": "/about",
-          "label": "About Us"
+          "label": "About Us",
+          "url": "/about"
         },
         {
-          "url": "/projects",
-          "label": "Projects"
+          "label": "Projects",
+          "url": "/projects"
         },
         {
-          "url": "/activities",
-          "label": "Activities"
+          "label": "Activities",
+          "url": "/activities"
         },
         {
-          "url": "/contact",
-          "label": "Contact"
+          "label": "Contact",
+          "url": "/contact"
         }
-      ],
-      "title": "Quick Links"
+      ]
     },
     {
+      "title": "Core Focus",
       "links": [
         {
-          "url": "#",
-          "label": "Livelihood & Women Employability"
+          "label": "Livelihood & Women Employability",
+          "url": "/projects?filter=Livelihood & Women Employability"
         },
         {
-          "url": "#",
-          "label": "Relief & Community Care"
+          "label": "Relief & Community Care",
+          "url": "/projects?filter=Relief & Community Care"
         },
         {
-          "url": "#",
-          "label": "Health & Dignity for All"
+          "label": "Health & Dignity for All",
+          "url": "/projects?filter=Health & Dignity for All"
         },
         {
-          "url": "#",
-          "label": "Empowering Through Education"
+          "label": "Empowering Through Education",
+          "url": "/projects?filter=Empowering Through Education"
         }
-      ],
-      "title": "Core Focus"
+      ]
     },
     {
+      "title": "Contact Us",
       "links": [
         {
           "label": "Email: director@saksham.org.in",
@@ -69,8 +70,7 @@
           "label": "Address: Ghaziabad, Uttar Pradesh, India",
           "url": "#"
         }
-      ],
-      "title": "Contact Us"
+      ]
     }
   ]
 }

@@ -18,21 +18,34 @@ const gridColumnsClass = {
       <div>
         <h4 class="text-white font-bold text-lg mb-4 tracking-wide">{col.title}</h4>
         <ul class="space-y-3 text-sm">
-          {col.links.map((item) => (
-            <li>
-              {item.url ? (
-                /* 🎯 Aligned Hover: Changes text to primary brand color smoothly without an underline */
-                <a 
-                  href={item.url} 
-                  class="hover:text-[rgb(var(--color-primary))] transition-colors duration-150 no-underline"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <span class="block leading-relaxed">{item.label}</span>
-              )}
-            </li>
-          ))}
+          {col.links.map((item) => {
+            let finalUrl = item.url || '';
+
+            // ⚡ THE FIX: If the footer hyperlink points to projects or activities index parameters,
+            // capture the search value and protect special symbols like ampersands (&) automatically.
+            if (finalUrl.includes('?filter=')) {
+              const [basePath, filterParam] = finalUrl.split('?filter=');
+              if (filterParam) {
+                finalUrl = `${basePath}?filter=${encodeURIComponent(filterParam.toLowerCase().trim())}`;
+              }
+            }
+
+            return (
+              <li>
+                {item.url ? (
+                  /* 🎯 Aligned Hover: Changes text to primary brand color smoothly without an underline */
+                  <a 
+                    href={finalUrl} 
+                    class="hover:text-[rgb(var(--color-primary))] transition-colors duration-150 no-underline"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <span class="block leading-relaxed">{item.label}</span>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </div>
     ))}

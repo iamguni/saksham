@@ -132,6 +132,7 @@ collections:
     files:
       - name: "leaders_config"
         label: "Manage Trustees & Leaders"
+        icon: "manage_accounts"
         file: "src/content/leaders/leaders.json"
         description: "Manage, add, update, or reorder NGO trustees and leadership profiles"
         media_folder: "/src/assets/images/leaders"
@@ -156,6 +157,7 @@ collections:
     files:
       - name: "pillars_config"
         label: "Manage Strategic Pillars"
+        icon: "strategy"
         file: "src/content/pillars/pillars.json"
         description: "Manage, add, update, or reorder strategic pillars"
         fields:
@@ -210,3 +212,35 @@ collections:
       - { label: "Feature Cover Image", name: "image", widget: "image" }
       - { label: "Event Execution Date", name: "date", widget: "datetime" }
       - { label: "Detailed Description", name: "description", widget: "text" }
+
+  - name: "donation"
+    label: "Donation Settings"
+    icon: "money"
+    delete: false # Prevents accidentally deleting the file itself
+    editor:
+      preview: false
+    files:
+      - name: "donation_tiers"
+        label: "Donation Tiers Configuration"
+        icon: "money_bag"
+        file: "src/content/donation/donation.json"
+        fields:
+          - name: "donationTiers"
+            label: "Donation Tiers List"
+            label_singleton: "Donation Tier"
+            widget: "list"
+            summary: "{{fields.title}} (₹{{fields.amount}})"
+            fields:
+              - { name: "id", label: "Unique ID", widget: "string", hint: "e.g., green-kit (no spaces)" }
+              - { name: "amount", label: "Amount (INR)", widget: "number", value_type: "int", min: 10 }
+              - { name: "title", label: "Tier Title", widget: "string" }
+              - { name: "description", label: "Detailed Description", widget: "text" }
+              - { name: "icon", label: "Lucide Icon Name", widget: "string", hint: 'Enter the exact icon name from the library (e.g., BookOpen, HandHeart). <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" style="color: rgb(var(--color-primary)); font-weight: bold; text-decoration: underline;">Open Lucide Icon Reference Library ↗</a>', default: "leaf" }
+              - { name: "tag", label: "Category Tag", widget: "string", hint: "e.g., Environment, Education" }
+              - name: "color"
+                label: "Theme Color Palette"
+                widget: "select"
+                options:
+                  - { label: "Vibrant Green", value: "emerald" }
+                  - { label: "Warm Orange", value: "orange" }
+                  - { label: "Premium Indigo", value: "indigo" }

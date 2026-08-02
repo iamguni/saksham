@@ -10,7 +10,7 @@
       "title": "Relief & Community Care",
       "desc": "Immediate disaster relief and sustained community management infrastructure.",
       "color": "secondary",
-      "featured_homepage": false
+      "featured_homepage": true
     },
     {
       "title": "Health & Dignity for All",
@@ -22,7 +22,7 @@
       "title": "Empowering Through Education",
       "desc": "Delivering structural learning facilities to children.",
       "color": "slate",
-      "featured_homepage": false
+      "featured_homepage": true
     }
   ]
 }

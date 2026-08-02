@@ -1,11 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Saksham CMS Portal</title>
-  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js" type="module"></script>
-</head>
-<body>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saksham Admin Panel</title>
+    
+    <!-- Clean Web-safe Favicon Route -->
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="apple-touch-icon" href="/images/favicon.png" />
+  </head>
+  <body>
+    <!-- Sveltia Core Application Ingestion Layer -->
+    <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+
+    <!-- ⚡ Dynamic Title & Login Page Text Customization Engine -->
+    <script>
+      (function() {
+        const targetBrandingText = "Saksham Admin Panel";
+
+        // 1. Tab Title Enforcement System
+        document.title = targetBrandingText;
+        const titleObserver = new MutationObserver(() => {
+          if (document.title !== targetBrandingText) {
+            document.title = targetBrandingText;
+          }
+        });
+        const titleElement = document.querySelector('title');
+        if (titleElement) {
+          titleObserver.observe(titleElement, { childList: true, characterData: true });
+        }
+
+        // 2. Login Screen UI Text Replacement System
+        const uiObserver = new MutationObserver(() => {
+          // Sveltia renders its main app heading/branding element inside these tags
+          const headings = document.querySelectorAll('h1, .title, .branding, [class*="logo"] + span, [class*="title"]');
+          
+          headings.forEach((el) => {
+            if (el.textContent && el.textContent.trim() === 'Sveltia CMS') {
+              el.textContent = targetBrandingText;
+            }
+          });
+          
+          // Fallback check: look for text nodes directly within the root elements if structure shifts
+          const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+          let node;
+          while (node = walker.nextNode()) {
+            if (node.nodeValue && node.nodeValue.trim() === 'Sveltia CMS') {
+              node.nodeValue = targetBrandingText;
+            }
+          }
+        });
+
+        // Start observing the whole body tree framework for dynamic view changes
+        uiObserver.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      })();
+    </script>
+  </body>
 </html>

@@ -3,8 +3,19 @@ backend:
   repo: iamguni/saksham
   branch: master
   base_url: https://sveltia-cms-auth.gurmeetworks.workers.dev
-  site_url: https://saksham.org.in
 
+# 🌌 Root-Level Dashboard Branding Visual Meta (Fixed Hierarchy)
+site_title: "Saksham Admin Panel"
+site_url: https://saksham.org.in
+logo_url: "/images/favicon.png"
+show_preview_links: true
+
+# 🎨 Native Theme Accent Injections
+theme:
+  primary_color: "#10b981"  # Vibrant Emerald Green for save buttons and actions
+  accent_color: "#6366f1"   # Deep Indigo for links and focus highlights
+
+# 📂 Global Asset Directory Mappings
 media_folder: "public/images"
 public_folder: "/images"
 

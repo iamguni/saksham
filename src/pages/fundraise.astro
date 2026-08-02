@@ -1,0 +1,179 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Share2, Smartphone, Sparkles, Trophy, Users } from 'lucide-astro';
+
+// ⚡ 1. Direct JSON Import Layer
+import fundraiseData from '../content/fundraise/fundraise.json';
+const { campaignOptions } = fundraiseData;
+---
+
+<MainLayout title="Create a Campaign - Fundraise for Saksham">
+  <section class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white py-16 px-4 relative overflow-hidden">
+    
+    <!-- Decorative Glow Shapes -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-[rgb(var(--color-primary))]/10 rounded-full blur-[120px] pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-[rgb(var(--color-secondary))]/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+    <div class="max-w-6xl mx-auto relative z-10">
+      
+      <!-- Heading Layout -->
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-bold uppercase tracking-widest text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 px-3 py-1 rounded-full">
+          Volunteer Advocacy Platform
+        </span>
+        <h1 class="text-4xl font-black text-white tracking-tight mt-3 mb-4">Empower Your Network to Protect the Future</h1>
+        <p class="text-slate-400 text-sm md:text-base leading-relaxed">
+          Create a micro-fundraising campaign banner template natively in your browser. Customize your milestone parameters, snap a clean capture snapshot, and leverage your network circle.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        
+        <!-- Left Column: Settings Interaction Form Controls -->
+        <div class="bg-slate-900/60 border border-slate-800 p-8 rounded-3xl backdrop-blur-sm space-y-6">
+          <h2 class="text-xl font-bold tracking-tight border-b border-slate-800 pb-3 flex items-center gap-2">
+            <Sparkles class="w-4 h-4 text-[rgb(var(--color-primary))]" /> 1. Configure Pledge Card Settings
+          </h2>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold tracking-wider uppercase text-slate-400 mb-2">Campaign Leader Name</label>
+              <input 
+                type="text" 
+                id="creator-name-input" 
+                placeholder="Enter your name" 
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[rgb(var(--color-primary))] transition-colors"
+                maxlength="25"
+              />
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold tracking-wider uppercase text-slate-400 mb-2">Target Action Focus Category</label>
+              <div class="relative">
+                <select 
+                  id="campaign-focus-select"
+                  class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[rgb(var(--color-primary))] transition-colors cursor-pointer appearance-none"
+                >
+                  {campaignOptions.map((option, index) => (
+                    <option value={option.value} selected={index === 0}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-400">
+                  <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold tracking-wider uppercase text-slate-400 mb-2">Target Milestones Funding Goal (INR)</label>
+              <input 
+                type="number" 
+                id="pledge-goal-input" 
+                value="5000" 
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-[rgb(var(--color-primary))] transition-colors font-mono"
+              />
+            </div>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 space-y-2">
+            <p class="font-bold text-slate-300 flex items-center gap-1.5"><Smartphone class="w-3.5 h-3.5" /> Ready for Social Sharing Matrix</p>
+            <p>Once you are satisfied with the customized visual output view layout on the right side panel, use your mobile device or desktop framework to snap a high-res screenshot crop to broadcast across your active network circles.</p>
+          </div>
+        </div>
+
+        <!-- Right Column: Direct Live Visual Canvas Engine Preview Sandbox -->
+        <div class="flex flex-col items-center justify-center space-y-6">
+          <div 
+            id="pledge-live-card-canvas" 
+            class="w-full max-w-sm aspect-[4/5] bg-gradient-to-br from-slate-900 to-slate-950 border-4 border-slate-800 rounded-3xl p-8 relative flex flex-col justify-between shadow-2xl transition-all select-none overflow-hidden group"
+          >
+            <!-- Design Accents -->
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-[rgb(var(--color-primary))]/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700"></div>
+
+            <!-- Top Header Layer -->
+            <div class="flex items-center justify-between border-b border-slate-800/80 pb-4 relative z-10">
+              <div>
+                <h3 class="font-black text-sm uppercase tracking-widest text-white">Saksham</h3>
+                <p class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mt-0.5">Change Maker Trust</p>
+              </div>
+              <Trophy class="w-5 h-5 text-[rgb(var(--color-primary))]" />
+            </div>
+
+            <!-- Main Middle Context -->
+            <div class="space-y-6 my-auto relative z-10">
+              <div class="space-y-1">
+                <span class="inline-block px-2 py-0.5 bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 text-[rgb(var(--color-primary))] font-black uppercase text-[8px] tracking-widest rounded">Official Pledge</span>
+                <h4 class="text-xl font-black text-white tracking-tight leading-snug">
+                  I am stepping up to act as a Change Maker!
+                </h4>
+              </div>
+
+              <div class="space-y-3">
+                <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                  Hi, I am <span id="card-preview-name" class="text-[rgb(var(--color-primary))] font-black border-b border-[rgb(var(--color-primary))]/30 pb-0.5">Your Name</span>. 
+                  I have pledged to launch a micro campaign driving support directly towards the <span id="card-preview-focus" class="text-white font-bold underline decoration-[rgb(var(--color-primary))]/40 underline-offset-4">Initiative Drive</span>.
+                </p>
+              </div>
+
+              <!-- Goal Visual Counter Widget Element Mock -->
+              <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl space-y-2">
+                <div class="flex justify-between items-center text-[10px] font-bold tracking-wider uppercase text-slate-400">
+                  <span>Target Goal Metric</span>
+                  <span class="text-white">₹<span id="card-preview-goal">5,000</span></span>
+                </div>
+                <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden border border-slate-800">
+                  <div class="bg-[rgb(var(--color-primary))] h-full w-[35%] rounded-full shadow-[0_0_12px_rgba(var(--color-primary),0.6)]"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom QR/CTA Tracking Footer Layer -->
+            <div class="border-t border-slate-800/80 pt-4 flex items-center justify-between relative z-10 text-[10px] text-slate-400 font-semibold tracking-wide">
+              <span class="flex items-center gap-1.5"><Users class="w-3.5 h-3.5 text-slate-500" /> Support My Campaign</span>
+              <span class="text-white font-bold font-mono text-[9px]">saksham.iamguni.in/donate</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 text-xs text-slate-400 font-bold bg-slate-900 border border-slate-800 px-4 py-2 rounded-full shadow-md">
+            <Share2 class="w-3.5 h-3.5 text-[rgb(var(--color-primary))]" /> Screenshot & post to WhatsApp groups!
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const inputName = document.getElementById('creator-name-input') as HTMLInputElement;
+  const selectFocus = document.getElementById('campaign-focus-select') as HTMLSelectElement;
+  const inputGoal = document.getElementById('pledge-goal-input') as HTMLInputElement;
+
+  const previewName = document.getElementById('card-preview-name') as HTMLSpanElement;
+  const previewFocus = document.getElementById('card-preview-focus') as HTMLSpanElement;
+  const previewGoal = document.getElementById('card-preview-goal') as HTMLSpanElement;
+
+  function handleLiveUpdateMatrix() {
+    if (previewName && inputName) {
+      previewName.textContent = inputName.value.trim() || "Your Name";
+    }
+    if (previewFocus && selectFocus) {
+      previewFocus.textContent = selectFocus.options[selectFocus.selectedIndex].text;
+    }
+    if (previewGoal && inputGoal) {
+      const parsedVal = parseInt(inputGoal.value, 10);
+      previewGoal.textContent = isNaN(parsedVal) ? "0" : parsedVal.toLocaleString('en-IN');
+    }
+  }
+
+  // Bind listener pipelines
+  if (inputName) inputName.addEventListener('input', handleLiveUpdateMatrix);
+  if (selectFocus) selectFocus.addEventListener('change', handleLiveUpdateMatrix);
+  if (inputGoal) inputGoal.addEventListener('input', handleLiveUpdateMatrix);
+
+  // Run initialization step to pull default selected value cleanly
+  handleLiveUpdateMatrix();
+</script>

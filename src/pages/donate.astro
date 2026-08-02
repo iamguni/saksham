@@ -1,0 +1,219 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Heart, ShieldCheck, Leaf, GraduationCap, Sparkles } from 'lucide-astro';
+
+// 1. Direct JSON Import Layer
+import donationData from '../content/donation/donation.json';
+const { donationTiers } = donationData;
+
+// 2. Icon Registry Mapping Matrix
+const iconMap: Record<string, any> = {
+  Leaf,
+  GraduationCap,
+  Sparkles
+};
+
+// ⚡ 3. Tailwind Active Style Registry Map
+// Matches color strings from JSON directly to Tailwind style states
+const colorThemes: Record<string, { activeBorder: string; activeBg: string; badge: string; iconBg: string; text: string }> = {
+  emerald: {
+    activeBorder: "border-emerald-500 hover:border-emerald-500",
+    activeBg: "bg-emerald-500/[0.04]",
+    badge: "bg-emerald-100 text-emerald-700",
+    iconBg: "group-hover:bg-emerald-100 group-hover:text-emerald-600",
+    text: "text-emerald-600"
+  },
+  orange: {
+    activeBorder: "border-orange-500 hover:border-orange-500",
+    activeBg: "bg-orange-500/[0.04]",
+    badge: "bg-orange-100 text-orange-700",
+    iconBg: "group-hover:bg-orange-100 group-hover:text-orange-600",
+    text: "text-orange-600"
+  },
+  indigo: {
+    activeBorder: "border-indigo-500 hover:border-indigo-500",
+    activeBg: "bg-indigo-500/[0.04]",
+    badge: "bg-indigo-100 text-indigo-700",
+    iconBg: "group-hover:bg-indigo-100 group-hover:text-indigo-600",
+    text: "text-indigo-600"
+  }
+};
+---
+
+<MainLayout title="Support Our Cause - Donate">
+  <section class="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 py-16 px-4">
+    <div class="max-w-6xl mx-auto">
+      
+      <!-- Heading -->
+      <div class="text-center max-w-2xl mx-auto mb-16">
+        <span class="text-xs font-black uppercase tracking-widest text-[rgb(var(--color-primary))] bg-[rgb(var(--color-primary))]/10 px-3 py-1 rounded-full">
+          Make a Difference Today
+        </span>
+        <h1 class="text-4xl font-black text-slate-900 tracking-tight mt-3 mb-4">Empower Change with Transparency</h1>
+        <p class="text-slate-600 leading-relaxed">
+          Select a targeted impact tier below or enter a custom contribution amount. Every single rupee directly funds field operations, materials, and local development.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        <!-- Left: Impact Catalog Grid Columns -->
+        <div class="lg:col-span-2 space-y-4">
+          <h2 class="text-xl font-black text-slate-900 mb-4 tracking-tight">1. Choose Your Impact Tier</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-4">
+            {donationTiers.map((tier) => {
+              const IconComponent = iconMap[tier.icon] || Sparkles;
+              // Safely pull themes or default gracefully to primary colors
+              const theme = colorThemes[tier.color] || colorThemes.indigo;
+              
+              return (
+                <div 
+                  data-tier-amount={tier.amount}
+                  data-tier-title={tier.title}
+                  data-theme-border={theme.activeBorder}
+                  data-theme-bg={theme.activeBg}
+                  class="donation-tier-card bg-white border-2 border-slate-200/80 p-6 rounded-2xl cursor-pointer transition-all shadow-sm flex gap-4 select-none group relative"
+                >
+                  <div class={`p-3 bg-slate-50 rounded-xl border border-slate-100 h-fit transition-colors ${theme.iconBg}`}>
+                    <IconComponent class="w-6 h-6 text-slate-600 transition-colors" />
+                  </div>
+                  <div class="space-y-1 pr-16">
+                    <span class={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${theme.badge}`}>
+                      {tier.tag}
+                    </span>
+                    <h3 class="font-black text-lg text-slate-900 tracking-tight mt-2">{tier.title}</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed">{tier.description}</p>
+                  </div>
+                  <div class="absolute right-6 top-6 text-right">
+                    <span class="text-xl font-black text-slate-900">₹{tier.amount}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <!-- Custom Amount Box -->
+          <div class="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm mt-6">
+            <h3 class="font-bold text-slate-900 tracking-tight mb-3">Or Choose a Custom Contribution Amount</h3>
+            <div class="relative max-w-xs group shadow-inner rounded-xl">
+              <span class="absolute left-4 top-3 text-lg font-bold text-slate-400 group-focus-within:text-[rgb(var(--color-primary))]">₹</span>
+              <input 
+                type="number" 
+                id="custom-donation-input" 
+                placeholder="Enter custom amount" 
+                class="w-full bg-slate-50/50 border border-slate-200 rounded-xl pl-8 pr-4 py-3 text-sm text-slate-800 font-bold focus:outline-none focus:border-[rgb(var(--color-primary))] focus:bg-white transition-all"
+                min="10"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Dynamic Summary Checkout Pane -->
+        <div class="bg-slate-900 text-white p-8 rounded-3xl shadow-xl sticky top-6 border border-slate-950 flex flex-col justify-between space-y-8">
+          <div class="space-y-6">
+            <div class="flex items-center gap-2 pb-4 border-b border-slate-800">
+              <Heart class="w-5 h-5 text-[rgb(var(--color-primary))]" />
+              <h2 class="font-black text-lg tracking-tight">Donation Summary</h2>
+            </div>
+
+            <!-- Dynamic Fields -->
+            <div class="space-y-4">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Selected Focus</span>
+                <p id="summary-focus-title" class="text-sm font-bold text-slate-200 mt-0.5">Custom Initiative Support</p>
+              </div>
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">Total Investment</span>
+                <p class="text-3xl font-black text-white mt-1 tracking-tight">₹<span id="summary-amount-label">0</span></p>
+              </div>
+            </div>
+
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs text-slate-400 leading-relaxed flex items-start gap-2.5">
+              <ShieldCheck class="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" />
+              <span>Secure transaction gateway wrapper hook active. 80G tax exemption receipts are dispatched instantly upon checkout validation.</span>
+            </div>
+          </div>
+
+          <!-- Gateway Trigger Action Button -->
+          <button 
+            id="proceed-payment-btn"
+            class="w-full bg-[rgb(var(--color-primary))] text-white hover:bg-[rgb(var(--color-accent))] py-4 rounded-xl font-bold text-sm tracking-wide transition-all shadow-md active:scale-98 disabled:opacity-40 disabled:cursor-not-allowed"
+            disabled
+          >
+            Proceed to Secure Payment
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  const cards = document.querySelectorAll('.donation-tier-card');
+  const customInput = document.getElementById('custom-donation-input') as HTMLInputElement;
+  const summaryAmount = document.getElementById('summary-amount-label') as HTMLSpanElement;
+  const summaryFocus = document.getElementById('summary-focus-title') as HTMLParagraphElement;
+  const submitBtn = document.getElementById('proceed-payment-btn') as HTMLButtonElement;
+
+  let currentAmount = 0;
+  let currentTitle = "Custom Initiative Support";
+
+  function updateSummaryDisplay() {
+    summaryAmount.textContent = currentAmount.toLocaleString('en-IN');
+    summaryFocus.textContent = currentTitle;
+    submitBtn.disabled = currentAmount <= 0;
+  }
+
+  function clearCardSelections() {
+    cards.forEach(card => {
+      const activeBorder = card.getAttribute('data-theme-border') || '';
+      const activeBg = card.getAttribute('data-theme-bg') || '';
+      
+      // Remove specific theme configuration classes safely
+      activeBorder.split(' ').forEach(cls => card.classList.remove(cls));
+      activeBg.split(' ').forEach(cls => card.classList.remove(cls));
+      
+      // Add resting fallback states back
+      card.classList.add('border-slate-200/80', 'bg-white');
+    });
+  }
+
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      clearCardSelections();
+      if (customInput) customInput.value = '';
+
+      const activeBorder = card.getAttribute('data-theme-border') || '';
+      const activeBg = card.getAttribute('data-theme-bg') || '';
+
+      card.classList.remove('border-slate-200/80', 'bg-white');
+      
+      // Inject theme parameters
+      activeBorder.split(' ').forEach(cls => card.classList.add(cls));
+      activeBg.split(' ').forEach(cls => card.classList.add(cls));
+
+      currentAmount = parseInt(card.getAttribute('data-tier-amount') || '0', 10);
+      currentTitle = card.getAttribute('data-tier-title') || "Custom Initiative Support";
+      updateSummaryDisplay();
+    });
+  });
+
+  if (customInput) {
+    customInput.addEventListener('input', () => {
+      clearCardSelections();
+      const val = parseInt(customInput.value, 10);
+      currentAmount = isNaN(val) || val < 0 ? 0 : val;
+      currentTitle = currentAmount > 0 ? `Custom Contribution` : "Custom Initiative Support";
+      updateSummaryDisplay();
+    });
+  }
+
+  if (submitBtn) {
+    submitBtn.addEventListener('click', () => {
+      alert(`Routing secure engine layer to checkout payload amount: ₹${currentAmount}`);
+    });
+  }
+</script>

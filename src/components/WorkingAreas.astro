@@ -22,6 +22,11 @@ const colorMap: Record<string, string> = {
   accent: "border-[rgb(var(--color-accent))]",
   slate: "border-slate-800"
 };
+
+// ⚡ DYNAMIC ALIGNMENT ENGINE: Switch grid rules if cards don't occupy a full row
+const gridAlignmentClass = pillars.length < 4 
+  ? "flex flex-wrap justify-center" 
+  : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
 ---
 <section class="bg-slate-100 py-20">
   <div class="max-w-7xl mx-auto px-4">
@@ -30,21 +35,20 @@ const colorMap: Record<string, string> = {
       <div class="w-12 h-1 bg-[rgb(var(--color-primary))] mx-auto mt-3 rounded-full"></div>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <!-- ⚡ Dynamic Layout Class applied seamlessly here -->
+    <div class={`${gridAlignmentClass} gap-8`}>
       {pillars.map((pillar) => {
-        // Correctly look up the matching color style class or fall back onto standard slate
         const borderColorClass = colorMap[pillar.color] || colorMap.slate;
         
-        // ⚡ THE FIX: Safe URL encoding protects special characters like ampersands (&) 
-        // by turning them into clean URL parameter tokens (e.g., %26)
         const targetFilter = pillar.title 
           ? encodeURIComponent(pillar.title.toLowerCase().trim()) 
           : 'all';
 
+        // ⚡ Card wrapper element constraints itself to standard sizing if sitting inside a Flex viewport
         return (
           <a 
             href={`/projects?filter=${targetFilter}`}
-            class={`block bg-white p-8 rounded-xl shadow-sm border-t-4 ${borderColorClass} transition-all duration-300 hover:-translate-y-1 hover:shadow-md group`}
+            class={`block bg-white p-8 rounded-xl shadow-sm border-t-4 ${borderColorClass} transition-all duration-300 hover:-translate-y-1 hover:shadow-md group w-full md:w-[calc(50%-1rem)] lg:w-[calc(25%-1.5rem)] max-w-sm`}
           >
             <h3 class="font-bold text-xl text-slate-900 mb-3 group-hover:text-[rgb(var(--color-primary))] transition-colors duration-200">
               {pillar.title}

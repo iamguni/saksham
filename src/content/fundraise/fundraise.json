@@ -1,0 +1,16 @@
+{
+  "campaignOptions": [
+    {
+      "value": "green-drive",
+      "label": "Green Tree Plantation Initiative"
+    },
+    {
+      "value": "child-literacy",
+      "label": "Child Literacy Support Drive"
+    },
+    {
+      "value": "clean-neighborhood",
+      "label": "Clean Neighborhood Sanitation"
+    }
+  ]
+}

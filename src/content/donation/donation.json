@@ -1,0 +1,31 @@
+{
+  "donationTiers": [
+    {
+      "id": "green-kit",
+      "amount": 500,
+      "title": "Eco Green Kit",
+      "description": "Sponsors 3 premium tree saplings, high-grade organic compost, and protective tree guards for local plantation drives.",
+      "icon": "Leaf",
+      "tag": "Environment",
+      "color": "emerald"
+    },
+    {
+      "id": "edu-kit",
+      "amount": 1500,
+      "title": "Student Empowerment Pack",
+      "description": "Funds complete educational materials, books, stationery, and learning tools for a child's entire semester.",
+      "icon": "GraduationCap",
+      "tag": "Education",
+      "color": "orange"
+    },
+    {
+      "id": "community-drive",
+      "amount": 5000,
+      "title": "Neighborhood Clean Drive",
+      "description": "Funds a comprehensive neighborhood restructuring initiative including waste cleanup tools and sanitation supply boxes.",
+      "icon": "Sparkles",
+      "tag": "Community Transformation",
+      "color": "indigo"
+    }
+  ]
+}

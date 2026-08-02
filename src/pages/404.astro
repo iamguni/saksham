@@ -1,0 +1,156 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { Home, ArrowLeft, Search } from 'lucide-astro';
+---
+
+<MainLayout title="404 - Page Not Found">
+  <section class="min-h-[75vh] flex items-center justify-center bg-gradient-to-b from-slate-50 via-white to-slate-50 relative overflow-hidden py-16 px-4">
+    
+    <!-- 🌌 Interactive Dynamic Grid Background Matrix Layer -->
+    <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+    </div>
+
+    <!-- 🎯 Centered Content Chassis Card -->
+    <div class="max-w-xl w-full text-center relative z-10 space-y-8 group">
+      
+      <!-- ⚡ Giant 404 Canvas/SVG Visual Frame -->
+      <div class="relative inline-block select-none animate-pulse duration-[4000ms]">
+        <h1 class="text-[10rem] md:text-[13rem] font-black tracking-tighter leading-none bg-gradient-to-b from-slate-900 via-slate-800 to-slate-400 bg-clip-text text-transparent drop-shadow-sm">
+          404
+        </h1>
+        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-[rgb(var(--color-primary))]/10 border border-[rgb(var(--color-primary))]/20 rounded-full backdrop-blur-sm shadow-sm">
+          <span class="text-xs font-black uppercase tracking-widest text-[rgb(var(--color-primary))] whitespace-nowrap">
+            Route Matrix Mismatch
+          </span>
+        </div>
+      </div>
+
+      <!-- 📝 Error Descriptions Header Blocks -->
+      <div class="space-y-3">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+          Lost in the Nexus?
+        </h2>
+        <p class="text-slate-500 text-sm md:text-base leading-relaxed max-w-md mx-auto">
+          The page or dynamic parameter index sequence you are hunting for has either been repositioned, purged, or never existed in this build environment.
+        </p>
+      </div>
+
+      <!-- 🔍 Embedded Fast Dynamic Search Bar Box -->
+      <div class="max-w-md mx-auto relative group/search shadow-md rounded-2xl">
+        <input 
+          type="text" 
+          id="page-404-search-input"
+          placeholder="Search site initiatives, drives, profiles..." 
+          class="w-full bg-white border border-slate-200 rounded-2xl pl-11 pr-4 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-[rgb(var(--color-primary))] focus:ring-1 focus:ring-[rgb(var(--color-primary))] transition-all shadow-inner"
+          autocomplete="off"
+        />
+        <Search class="absolute left-4 top-3.5 w-4 h-4 text-slate-400 group-focus-within/search:text-[rgb(var(--color-primary))] transition-colors" />
+        
+        <!-- Dropdown Result Float Tray Wrapper -->
+        <div 
+          id="page-404-search-results" 
+          class="absolute left-0 right-0 mt-2 bg-white border border-slate-200 shadow-xl rounded-2xl max-h-60 overflow-y-auto hidden divide-y divide-slate-100 z-50"
+        >
+        </div>
+      </div>
+
+      <!-- 🎮 Navigational Action Matrix Links -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 max-w-sm mx-auto">
+        <button 
+          onclick="history.back()"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95"
+        >
+          <ArrowLeft class="w-4 h-4" /> Go Backward
+        </button>
+        <a 
+          href="/" 
+          class="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-[rgb(var(--color-primary))] text-white hover:bg-[rgb(var(--color-accent))] text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md shadow-[rgb(var(--color-primary))]/10 active:scale-95"
+        >
+          <Home class="w-4 h-4" /> Head Home
+        </a>
+      </div>
+
+    </div>
+  </section>
+</MainLayout>
+
+<!-- Wired Client-side Search Logic Bridge Script -->
+<script>
+  interface SearchItem {
+    title: string;
+    summary: string;
+    description: string;
+    url: string;
+    type: string;
+  }
+
+  let searchIndex: SearchItem[] = [];
+  let isIndexFetched = false;
+
+  const inputEl = document.getElementById('page-404-search-input') as HTMLInputElement;
+  const resultsEl = document.getElementById('page-404-search-results') as HTMLDivElement;
+
+  async function ensureSearchIndexReady() {
+    if (isIndexFetched) return;
+    try {
+      const response = await fetch('/api/search-index.json');
+      searchIndex = await response.json();
+      isIndexFetched = true;
+    } catch (e) {
+      console.error('Failed to resolve database search endpoint metrics compilation map matrix:', e);
+    }
+  }
+
+  if (inputEl && resultsEl) {
+    inputEl.addEventListener('focus', ensureSearchIndexReady);
+    
+    inputEl.addEventListener('input', () => {
+      const query = inputEl.value.toLowerCase().trim();
+
+      if (query.length < 2) {
+        resultsEl.innerHTML = '';
+        resultsEl.classList.add('hidden');
+        return;
+      }
+
+      const matches = searchIndex.filter(item => 
+        item.title.toLowerCase().includes(query) ||
+        item.summary.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query)
+      );
+
+      resultsEl.innerHTML = '';
+
+      if (matches.length === 0) {
+        resultsEl.innerHTML = `<div class="p-4 text-xs font-semibold text-slate-400 text-center">No matching records found for "${inputEl.value}"</div>`;
+        resultsEl.classList.remove('hidden');
+        return;
+      }
+
+      matches.slice(0, 4).forEach(item => {
+        const linkRow = document.createElement('a');
+        linkRow.href = item.url;
+        linkRow.className = "block p-4 hover:bg-slate-50 transition-colors group text-left";
+        linkRow.innerHTML = `
+          <span class="inline-block px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-100 text-slate-500 mb-1 group-hover:bg-[rgb(var(--color-primary))]/10 group-hover:text-[rgb(var(--color-primary))] transition-colors">
+            ${item.type}
+          </span>
+          <h4 class="text-xs font-bold text-slate-900 group-hover:text-[rgb(var(--color-primary))] transition-colors line-clamp-1">${item.title}</h4>
+          <p class="text-[11px] text-slate-400 mt-0.5 line-clamp-1 leading-relaxed">${item.summary}</p>
+        `;
+        resultsEl.appendChild(linkRow);
+      });
+
+      resultsEl.classList.remove('hidden');
+    });
+
+    // Close tray if clicking outside active focus zones
+    document.addEventListener('click', (e) => {
+      const clickTarget = e.target as HTMLElement;
+      if (!inputEl.contains(clickTarget) && !resultsEl.contains(clickTarget)) {
+        resultsEl.classList.add('hidden');
+      }
+    });
+  }
+</script>

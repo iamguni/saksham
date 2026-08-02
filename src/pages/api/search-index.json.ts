@@ -13,7 +13,7 @@ export async function GET() {
     title: item.data.title || 'Project Initiative',
     summary: item.data.summary || '',
     description: item.data.description || '',
-    url: `/projects/${item.data.slug}`,
+    url: `/projects/${item.data.slug || item.id || ''}`,
     type: 'Project Initiative'
   }));
 
@@ -22,18 +22,33 @@ export async function GET() {
     title: item.data.title || 'Activity Event',
     summary: item.data.summary || '',
     description: item.data.description || '',
-    url: `/activities/${item.data.slug}`,
+    url: `/activities/${item.data.slug || item.id || ''}`,
     type: 'Activity Event'
   }));
 
-  // 3. ⚡ Map Leader Profile entries (indexing names, roles, and bios)
-  const leaderItems = leaders.map(item => ({
-    title: item.data.name || 'Team Leader',
-    summary: item.data.role || 'Core Member',
-    description: `${item.data.bio || ''} ${item.data.quote || ''}`,
-    url: '/', // Redirects visitors straight to the Team/About layout deck
-    type: 'Leadership Team'
-  }));
+  // 3. ⚡ FIXED: Robust Leadership Mapping Matrix
+  let leaderItems: any[] = [];
+
+  // Check if your collection contains a single global data file (e.g., leaders.json with a leaders array)
+  if (leaders.length === 1 && (leaders[0].data as any).leaders) {
+    const rawLeaders = (leaders[0].data as any).leaders || [];
+    leaderItems = rawLeaders.map((item: any) => ({
+      title: item.name || 'Team Leader',
+      summary: item.role || 'Core Member',
+      description: `${item.bio || ''} ${item.message || ''} ${item.quote || ''}`.trim(),
+      url: '/', // Redirects straight to the Team/About profile layout
+      type: 'Leadership Team'
+    }));
+  } else {
+    // Fallback if they are structured as multiple individual files per leader
+    leaderItems = leaders.map(item => ({
+      title: item.data.name || 'Team Leader',
+      summary: item.data.role || 'Core Member',
+      description: `${item.data.bio || ''} ${item.data.message || ''} ${item.data.quote || ''}`.trim(),
+      url: '/about',
+      type: 'Leadership Team'
+    }));
+  }
 
   // 4. Combine all components into a single global index matrix
   const masterIndex = [...projectItems, ...activityItems, ...leaderItems];
@@ -42,7 +57,7 @@ export async function GET() {
     status: 200,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=3600' // Caches the file in the browser for performance
+      'Cache-Control': 'public, max-age=3600'
     }
   });
 }

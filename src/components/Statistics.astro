@@ -1,24 +1,47 @@
 ---
 import siteData from '../content/settings/site.json';
+import { Leaf, HandHeart, Users, Clock } from 'lucide-astro';
+
 const { stats } = siteData;
 ---
-<section class="bg-brand-gradient py-16 text-white relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10 text-center">
-    <div class="p-4">
-      <p class="text-4xl md:text-5xl font-black mb-2">{stats.saplings}+</p>
-      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Saplings Sustained</p>
+<section class="bg-brand-gradient py-20 text-white relative overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 relative z-10 text-center">
+    
+    <!-- 🌲 Saplings Sustained -->
+    <div class="p-6 flex flex-col items-center group">
+      <div class="mb-5 p-4 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-lg">
+        <Leaf class="w-8 h-8 md:w-10 md:h-10 text-[rgb(var(--color-secondary))]" />
+      </div>
+      <p class="text-4xl md:text-5xl font-black mb-2 tracking-tight">{stats.saplings}+</p>
+      <p class="text-xs md:text-sm font-bold tracking-wider uppercase text-slate-200/90">Saplings Sustained</p>
     </div>
-    <div class="p-4">
-      <p class="text-4xl md:text-5xl font-black mb-2">{stats.donations}</p>
-      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Donations Raised</p>
+
+    <!-- 💝 Donations Raised -->
+    <div class="p-6 flex flex-col items-center group">
+      <div class="mb-5 p-4 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-lg">
+        <HandHeart class="w-8 h-8 md:w-10 md:h-10 text-[rgb(var(--color-secondary))]" />
+      </div>
+      <p class="text-4xl md:text-5xl font-black mb-2 tracking-tight">{stats.donations}</p>
+      <p class="text-xs md:text-sm font-bold tracking-wider uppercase text-slate-200/90">Donations Raised</p>
     </div>
-    <div class="p-4">
-      <p class="text-4xl md:text-5xl font-black mb-2">{stats.lives}+</p>
-      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Lives Restructured</p>
+
+    <!-- 👥 Lives Restructured -->
+    <div class="p-6 flex flex-col items-center group">
+      <div class="mb-5 p-4 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-lg">
+        <Users class="w-8 h-8 md:w-10 md:h-10 text-[rgb(var(--color-secondary))]" />
+      </div>
+      <p class="text-4xl md:text-5xl font-black mb-2 tracking-tight">{stats.lives}+</p>
+      <p class="text-xs md:text-sm font-bold tracking-wider uppercase text-slate-200/90">Lives Restructured</p>
     </div>
-    <div class="p-4">
-      <p class="text-4xl md:text-5xl font-black mb-2">{stats.hours}+</p>
-      <p class="text-sm font-medium tracking-wide uppercase text-slate-100">Volunteering Hours</p>
+
+    <!-- 🕒 Volunteering Hours -->
+    <div class="p-6 flex flex-col items-center group">
+      <div class="mb-5 p-4 bg-white/10 rounded-2xl backdrop-blur-sm border border-white/10 group-hover:bg-white/20 transition-all duration-300 shadow-lg">
+        <Clock class="w-8 h-8 md:w-10 md:h-10 text-[rgb(var(--color-secondary))]" />
+      </div>
+      <p class="text-4xl md:text-5xl font-black mb-2 tracking-tight">{stats.hours}+</p>
+      <p class="text-xs md:text-sm font-bold tracking-wider uppercase text-slate-200/90">Volunteering Hours</p>
     </div>
+    
   </div>
 </section>

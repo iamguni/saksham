@@ -2,7 +2,7 @@ backend:
   name: github
   repo: iamguni/saksham
   branch: master
-  base_url: https://sveltia-cms-auth.gurmeetworks.workers.dev
+  base_url: https://cms-auth.iamguni.in
 
 # 🌌 Root-Level Dashboard Branding Visual Meta (Fixed Hierarchy)
 site_title: "Saksham Admin Panel"
